@@ -1,22 +1,24 @@
 # Tweener
 
-## Description
-Tweener is a Unity package designed to facilitate smooth transitions and animations for game objects. It provides a variety of easing functions and commands to animate properties such as position, scale, rotation, and color.
+## Overview
+Tweener is a comprehensive Unity package that streamlines the process of creating smooth transitions and animations for game objects. It offers a diverse selection of easing functions and animation commands to modify properties like position, scale, rotation, and color.
 
-## Features
-- **Smooth Animations**: Easily animate properties of game objects with customizable easing functions.
-- **Multiple Commands**: Includes commands for moving, scaling, rotating, and fading UI elements.
-- **Asynchronous Support**: Supports asynchronous animations for better performance.
-- **Looping Options**: Offers different looping types including linear and yoyo.
+## Key Features
+- **Seamless Animations**: Effortlessly animate game object properties with customizable easing functions.
+- **Versatile Commands**: Provides commands for moving, scaling, rotating, and fading UI elements.
+- **Asynchronous Compatibility**: Enables asynchronous animations for enhanced performance.
+- **Flexible Looping**: Supports various looping types, including linear and yoyo.
 
 ## Installation
-To install the Tweener package, add the following line to your `manifest.json` file in your Unity project:
+To integrate the Tweener package into your Unity project, add the following entry to your `manifest.json` file:
 
 ```json
 "com.thebaddest.tweener": "1.0.0"
-``` 
-## Usage
-Here’s a quick example of how to use the Tweener package:
+```
+
+## Quick Start Guide
+Below is a simple example demonstrating how to use the Tweener package:
+
 ```csharp
 using THEBADDEST.Tweening;
 using UnityEngine;
@@ -27,27 +29,30 @@ public class Example : MonoBehaviour
 
     void Start()
     {
-        ITweener tweener = new CorotineTweener();
+        ITweener tweener = new CoroutineTweener();
         tweener.Move(target, new Vector3(0, 0, 0), new Vector3(10, 10, 10), 2f);
     }
 }
 ```
-## Commands
-Move: Moves a game object from a start position to an end position.
-Scale: Scales a game object from a start scale to an end scale.
-Rotate: Rotates a game object from a start rotation to an end rotation.
-FadeImage: Fades a UI image from a start alpha to an end alpha.
+
+## Available Commands
+- **Move**: Transitions a game object from a starting position to an ending position.
+- **Scale**: Adjusts a game object from a starting scale to an ending scale.
+- **Rotate**: Rotates a game object from a starting rotation to an ending rotation.
+- **FadeImage**: Changes a UI image's alpha from a starting value to an ending value.
+
 ## Easing Functions
-The Tweener package includes a variety of easing functions such as:
+Tweener includes a wide range of easing functions, such as:
 1. Linear
 2. EaseInQuad
 3. EaseOutQuad
 4. EaseInOutQuad
 5. And many more...
 
-## Author
-Name: Umair Saifullah
-Email: contact@umairsaifullah.com
-Website: umairsaifullah.com
+## Author Information
+- **Name**: Umair Saifullah
+- **Email**: contact@umairsaifullah.com
+- **Website**: [umairsaifullah.com](https://www.umairsaifullah.com)
+
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License. For more details, refer to the LICENSE file.
