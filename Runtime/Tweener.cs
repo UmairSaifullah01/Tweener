@@ -31,6 +31,7 @@ namespace THEBADDEST.Tweening
 		protected float              deltaTime       = Time.deltaTime;
 		protected bool               independentTime = false;
 		protected float              delay           = 0.0f;
+		protected bool               isPlaying       = false;
 
 		protected virtual TweenerEasing.Function GetEaseFunction()
 		{
@@ -80,7 +81,7 @@ namespace THEBADDEST.Tweening
 
 		public abstract void Lerp(LerpDelegate lerp, float duration);
 
-		public abstract IEnumerator GetEnumerator();
+		public abstract IEnumerator GetIterator();
 
 	}
 

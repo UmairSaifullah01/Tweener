@@ -9,16 +9,15 @@ namespace THEBADDEST.Tweening
 	public class CorotineTweener : Tweener
 	{
 
-		IEnumerator enumerator;
+		WaitUntil iterator=> new WaitUntil(()=>!isPlaying);
 		public override void Lerp(LerpDelegate lerp, float duration)
 		{
-			enumerator=LerpCoroutineInternal(lerp, duration);
-			TweenerSolver.PlayTweener(this, enumerator);
+			TweenerSolver.PlayTweener(this, LerpCoroutineInternal(lerp, duration));
 		}
 
-		public override IEnumerator GetEnumerator()
+		public override IEnumerator GetIterator()
 		{
-			return LerpCoroutineInternal(null, 0);
+			return iterator;
 		}
 
 		protected override void CalculateDeltaTime()
@@ -28,6 +27,7 @@ namespace THEBADDEST.Tweening
 
 		private IEnumerator LerpCoroutineInternal(LerpDelegate lerp, float duration)
 		{
+			isPlaying = true;
 			yield return independentTime ? new WaitForSecondsRealtime(delay) : new WaitForSeconds(delay);
 			int loopsCount = this.loops;
 			while (loopsCount>0 || loops==-1)
@@ -47,7 +47,9 @@ namespace THEBADDEST.Tweening
 				}
 				loopsCount--;
 			}
+			isPlaying = false;
 			onCompleteAllLoopsDelegate?.Invoke();
+			
 		}
 
 		private IEnumerator LerpCoroutineSingleInternal(LerpDelegate lerp, float duration)
