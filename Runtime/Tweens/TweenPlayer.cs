@@ -12,7 +12,7 @@ namespace THEBADDEST.Tweening
 		[SerializeField] bool autoPlay = false;
 		[SerializeField] Tween tween;
 
-		void Start()
+		void OnEnable()
 		{
 			if (autoPlay)
 			{
