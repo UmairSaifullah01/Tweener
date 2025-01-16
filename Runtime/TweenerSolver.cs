@@ -15,6 +15,7 @@ namespace THEBADDEST.Tweening
                     GameObject go = new GameObject("TweenerSolver");
                     _SolverInstance = go.AddComponent<TweenerSolver>();
                     go.hideFlags    = HideFlags.HideInHierarchy;
+                    DontDestroyOnLoad(go);
                 }
                 return _SolverInstance;
             }
