@@ -81,7 +81,7 @@ namespace THEBADDEST.Tweening
 
 		public abstract void Lerp(LerpDelegate lerp, float duration);
 
-		public abstract IEnumerator GetIterator();
+		public abstract IEnumerator WaitForCompletion();
 
 	}
 

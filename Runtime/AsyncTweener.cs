@@ -18,7 +18,7 @@ namespace THEBADDEST.Tweening
 			task = LerpAsync(lerp, duration);
 		}
 
-		public override IEnumerator GetIterator()
+		public override IEnumerator WaitForCompletion()
 		{
 			yield return task.GetAwaiter();
 		}

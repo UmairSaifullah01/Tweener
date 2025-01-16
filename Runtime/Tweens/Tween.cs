@@ -36,7 +36,7 @@ namespace THEBADDEST.Tweening
 		}
 		public virtual IEnumerator Play(Transform target)
 		{
-			yield return tweener.GetIterator();
+			yield return tweener.WaitForCompletion();
 			onComplete?.Invoke();
 		}
 

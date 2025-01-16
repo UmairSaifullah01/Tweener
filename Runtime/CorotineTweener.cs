@@ -9,15 +9,17 @@ namespace THEBADDEST.Tweening
 	public class CorotineTweener : Tweener
 	{
 
-		WaitUntil iterator=> new WaitUntil(()=>!isPlaying);
 		public override void Lerp(LerpDelegate lerp, float duration)
 		{
 			TweenerSolver.PlayTweener(this, LerpCoroutineInternal(lerp, duration));
 		}
 
-		public override IEnumerator GetIterator()
+		public override IEnumerator WaitForCompletion()
 		{
-			return iterator;
+			while (isPlaying)
+			{
+				yield return null;
+			}
 		}
 
 		protected override void CalculateDeltaTime()
@@ -30,22 +32,25 @@ namespace THEBADDEST.Tweening
 			isPlaying = true;
 			yield return independentTime ? new WaitForSecondsRealtime(delay) : new WaitForSeconds(delay);
 			int loopsCount = this.loops;
-			while (loopsCount>0 || loops==-1)
+			if (loopType == LoopType.Linear)
 			{
-				if (loopType == LoopType.Linear)
+				while (loopsCount > 0 || loops == -1)
 				{
 					yield return LerpCoroutineSingleInternal(lerp, duration);
+					loopsCount--;
 				}
-				else if (loopType == LoopType.Yoyo)
+			}
+			else if (loopType == LoopType.Yoyo)
+			{
+				while (loopsCount > 0 || loops == -1)
 				{
-					int cache = loopsCount;
 					yield return LerpCoroutineSingleInternal(intercept =>
 					{
-						intercept = cache % 2 != 0 ? intercept : 1 - intercept;
+						intercept = loopsCount % 2 != 0 ? intercept : 1 - intercept;
 						lerp?.Invoke(intercept);
 					}, duration);
+					loopsCount--;
 				}
-				loopsCount--;
 			}
 			isPlaying = false;
 			onCompleteAllLoopsDelegate?.Invoke();
