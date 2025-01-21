@@ -30,6 +30,7 @@ namespace THEBADDEST.Tweening
 
         public static void StopTweener(ITweener tweener)
         {
+            if(tweener==null) return;
             if (Solver._tweens.TryGetValue(tweener, out Coroutine coroutine))
             {
                 Solver.StopCoroutine(coroutine);
