@@ -29,12 +29,21 @@ namespace THEBADDEST.Tweening
 		[SerializeField] UnityEvent       onComplete;
 
 		Dictionary<int, List<TweenTransform>> tweenHierarchy;
+		List<ITweener>                        tweeners = new List<ITweener>();
 
 		void OnEnable()
 		{
 			CreateHierarchy();
 			if (autoPlay)
 				Play();
+		}
+
+		void OnDisable()
+		{
+			for (int i = 0; i < tweeners.Count; i++)
+			{
+				TweenerSolver.StopTweener(tweeners[i]);
+			}
 		}
 
 		void CreateHierarchy()
@@ -70,6 +79,7 @@ namespace THEBADDEST.Tweening
 		IEnumerator PlayCoroutine()
 		{
 			List<TweenTransform> sequence = new List<TweenTransform>();
+			
 			foreach (var pair in tweenHierarchy)
 			{
 				for (int i = 0; i < pair.Value.Count; i++)
@@ -84,6 +94,7 @@ namespace THEBADDEST.Tweening
 						if (tweenTransform.delay != 0)
 							tweenTransform.tween.delay = tweenTransform.delay;
 						StartCoroutine(tweenTransform.tween.Play(tweenTransform.targetTransform));
+						tweeners.Add(tweenTransform.tween.tweener);
 					}
 				}
 			}
@@ -92,7 +103,9 @@ namespace THEBADDEST.Tweening
 			{
 				if (tweenTransform.delay != 0)
 					tweenTransform.tween.delay = tweenTransform.delay;
-				yield return tweenTransform.tween.Play(tweenTransform.targetTransform);
+				IEnumerator playCoroutine = tweenTransform.tween.Play(tweenTransform.targetTransform);
+				tweeners.Add(tweenTransform.tween.tweener);
+				yield return playCoroutine;
 			}
 
 			onComplete?.Invoke();
