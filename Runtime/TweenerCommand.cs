@@ -37,7 +37,11 @@ namespace THEBADDEST.Tweening
 
 		public override void Execute()
 		{
-			tweener.Lerp(t => { target.position = Vector3.Lerp(start, end, t); }, duration);
+			tweener.Lerp(t =>
+			{
+				if(target==null) return;
+				target.position = Vector3.Lerp(start, end, t);
+			}, duration);
 		}
 
 	}
@@ -51,7 +55,11 @@ namespace THEBADDEST.Tweening
 
 		public override void Execute()
 		{
-			tweener.Lerp(t => { target.localPosition = Vector3.Lerp(start, end, t); }, duration);
+			tweener.Lerp(t =>
+			{
+				if(target==null) return;
+				target.localPosition = Vector3.Lerp(start, end, t);
+			}, duration);
 		}
 
 	}
@@ -65,7 +73,11 @@ namespace THEBADDEST.Tweening
 
 		public override void Execute()
 		{
-			tweener.Lerp(t => { target.localScale = Vector3.Lerp(start, end, t); }, duration);
+			tweener.Lerp(t =>
+			{
+				if(target==null) return;
+				target.localScale = Vector3.Lerp(start, end, t);
+			}, duration);
 		}
 
 	}
@@ -79,7 +91,11 @@ namespace THEBADDEST.Tweening
 
 		public override void Execute()
 		{
-			tweener.Lerp(t => { target.eulerAngles = Vector3.Lerp(start, end, t); }, duration);
+			tweener.Lerp(t =>
+			{
+				if(target==null) return;
+				target.eulerAngles = Vector3.Lerp(start, end, t);
+			}, duration);
 		}
 
 	}
@@ -95,7 +111,10 @@ namespace THEBADDEST.Tweening
 		{
 			//tweener.Lerp(t => { target.localRotation=Quaternion.Slerp(Quaternion.Euler(start),Quaternion.Euler(end),t); }, duration);
 			//tweener.Lerp(t => { target.localRotation=Quaternion.LerpUnclamped(Quaternion.Euler(start),Quaternion.Euler(end),t); }, duration);
-			tweener.Lerp(t =>  target.localEulerAngles = Vector3.LerpUnclamped(start, end, t), duration);
+			tweener.Lerp(t => { 
+				if(target==null) return;
+				target.localEulerAngles = Vector3.LerpUnclamped(start, end, t);
+			}, duration);
 		
 		}
 
@@ -125,6 +144,7 @@ namespace THEBADDEST.Tweening
 			Color targetColor = target.color;
 			tweener.Lerp(intercept =>
 			{
+				if(target==null) return;
 				targetColor.a = Mathf.Lerp(start, end, intercept);
 				target.color  = targetColor;
 			}, duration);
