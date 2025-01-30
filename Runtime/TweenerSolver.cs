@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -46,5 +47,12 @@ namespace THEBADDEST.Tweening
             }
             Solver._tweens.Clear();
         }
+
+        void OnApplicationQuit()
+        {
+            StopAllCoroutines();
+            Destroy(gameObject);
+        }
+
     }
 }
