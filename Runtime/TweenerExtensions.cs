@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 
@@ -52,8 +50,6 @@ namespace THEBADDEST.Tweening
 			command.Execute();
 			return tweener;
 		}
-
-		
 
 	}
 

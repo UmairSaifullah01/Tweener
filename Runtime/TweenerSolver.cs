@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,8 +13,9 @@ namespace THEBADDEST.Tweening
                 if (_SolverInstance == null)
                 {
                     GameObject go = new GameObject("TweenerSolver");
-                    _SolverInstance = go.AddComponent<TweenerSolver>();
-                    go.hideFlags    = HideFlags.HideInHierarchy;
+                    _SolverInstance         = go.AddComponent<TweenerSolver>();
+                    go.hideFlags            = HideFlags.HideInHierarchy;
+                    _SolverInstance.factory = new TweenerFactory();
                     DontDestroyOnLoad(go);
                 }
                 return _SolverInstance;
@@ -24,6 +24,17 @@ namespace THEBADDEST.Tweening
 
         private Dictionary<ITweener, Coroutine> _tweens = new Dictionary<ITweener, Coroutine>();
 
+        TweenerFactory         factory;
+
+        public static ITweener Create()
+        {
+           return _SolverInstance.factory.Create();
+        }
+        public static void Dispose(ITweener tweener)
+        {
+            _SolverInstance.factory.Dispose(tweener);
+        }
+        
         public static void PlayTweener(ITweener tweener, IEnumerator coroutine)
         {
             Solver._tweens[tweener] = Solver.StartCoroutine(coroutine);
@@ -51,7 +62,6 @@ namespace THEBADDEST.Tweening
         void OnApplicationQuit()
         {
             StopAllCoroutines();
-            Destroy(gameObject);
         }
 
     }
