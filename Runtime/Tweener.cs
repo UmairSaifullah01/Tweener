@@ -32,6 +32,8 @@ namespace THEBADDEST.Tweening
 		protected bool               independentTime = false;
 		protected float              delay           = 0.0f;
 		protected bool               isPlaying       = false;
+		protected LerpDelegate       lerpAction      = null;
+		protected float              duration        = 0;
 
 		protected virtual TweenerEasing.Function GetEaseFunction()
 		{
@@ -79,7 +81,18 @@ namespace THEBADDEST.Tweening
 			return this;
 		}
 
-		public abstract void Lerp(LerpDelegate lerp, float duration);
+		public virtual void Lerp(LerpDelegate lerp, float duration)
+		{
+			this.lerpAction = lerp;
+			this.duration   = duration;
+		}
+
+		public void Reverse()
+		{
+			isPlaying = false;
+			TweenerSolver.StopTweener(this);
+			Lerp(t=>lerpAction.Invoke(1-t), duration);
+		}
 
 		public abstract IEnumerator WaitForCompletion();
 

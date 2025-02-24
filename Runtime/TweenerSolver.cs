@@ -28,11 +28,11 @@ namespace THEBADDEST.Tweening
 
         public static ITweener Create()
         {
-           return _SolverInstance.factory.Create();
+            return Solver.factory.Create();
         }
         public static void Dispose(ITweener tweener)
         {
-            _SolverInstance.factory.Dispose(tweener);
+            Solver.factory.Dispose(tweener);
         }
         
         public static void PlayTweener(ITweener tweener, IEnumerator coroutine)

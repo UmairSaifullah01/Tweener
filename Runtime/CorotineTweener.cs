@@ -11,6 +11,7 @@ namespace THEBADDEST.Tweening
 
 		public override void Lerp(LerpDelegate lerp, float duration)
 		{
+			base.Lerp(lerp, duration);
 			TweenerSolver.PlayTweener(this, LerpCoroutineInternal(lerp, duration));
 		}
 

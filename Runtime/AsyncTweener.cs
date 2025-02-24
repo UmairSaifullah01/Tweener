@@ -15,6 +15,7 @@ namespace THEBADDEST.Tweening
 		DateTime       lastTime ;
 		public override void Lerp(LerpDelegate lerp, float duration)
 		{
+			base.Lerp(lerp, duration);
 			task = LerpAsync(lerp, duration);
 		}
 

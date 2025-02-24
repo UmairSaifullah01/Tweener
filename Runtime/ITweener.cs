@@ -26,6 +26,7 @@ namespace THEBADDEST.Tweening
 		Tweener  SetTime(bool independent=false);
 		void Lerp(LerpDelegate      lerp, float duration);
 
+		void         Reverse();
 		 IEnumerator WaitForCompletion();
 
 	}
