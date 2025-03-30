@@ -5,23 +5,14 @@ using UnityEngine.UI;
 namespace THEBADDEST.Tweening
 {
 
-	public static class VirtualTween
-	{
-		public static ITweener Float(LerpDelegate lerpDelegate, float duration, float start = 0f, float end = 1f)
-		{
-			var tweener = TweenerSolver.Create();
-			tweener.Lerp(t=>
-			{
-				lerpDelegate?.Invoke(Mathf.Lerp(start,end,t));
-			}, duration);
-			return tweener;
-		}
-		
-	}
-
 	public static class OtherExtensions
 	{
 
+		public static ITweener OnComplete(this ITweener tweener, CallbackDelegate onComplete)
+		{
+			tweener.OnCompleteAllLoops += onComplete.Invoke;
+			return tweener;
+		}
 		
 		public static ITweener ColorBlockTween(this Renderer target, Color start, Color end, float duration, string colorPropertyName = "_Color")
 		{
@@ -65,6 +56,16 @@ namespace THEBADDEST.Tweening
 				if (target == null) return;
 				color.a      = Mathf.Lerp(start, end, t);
 				target.color = color;
+			}, duration);
+			return tweener;
+		}
+		public static ITweener FillAmountImage(this Image target, float start, float end, float duration)
+		{
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				target.fillAmount = Mathf.Lerp(start, end, t);
 			}, duration);
 			return tweener;
 		}

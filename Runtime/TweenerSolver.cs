@@ -13,8 +13,8 @@ namespace THEBADDEST.Tweening
                 if (_SolverInstance == null)
                 {
                     GameObject go = new GameObject("TweenerSolver");
-                    _SolverInstance         = go.AddComponent<TweenerSolver>();
-                    go.hideFlags            = HideFlags.HideInHierarchy;
+                    _SolverInstance = go.AddComponent<TweenerSolver>();
+                    go.hideFlags = HideFlags.HideInHierarchy;
                     _SolverInstance.factory = new TweenerFactory();
                     DontDestroyOnLoad(go);
                 }
@@ -24,7 +24,7 @@ namespace THEBADDEST.Tweening
 
         private Dictionary<ITweener, Coroutine> _tweens = new Dictionary<ITweener, Coroutine>();
 
-        TweenerFactory         factory;
+        TweenerFactory factory;
 
         public static ITweener Create()
         {
@@ -34,7 +34,7 @@ namespace THEBADDEST.Tweening
         {
             Solver.factory.Dispose(tweener);
         }
-        
+
         public static void PlayTweener(ITweener tweener, IEnumerator coroutine)
         {
             Solver._tweens[tweener] = Solver.StartCoroutine(coroutine);
@@ -42,19 +42,21 @@ namespace THEBADDEST.Tweening
 
         public static void StopTweener(ITweener tweener)
         {
-            if(tweener==null) return;
+            if (tweener == null) return;
             if (Solver._tweens.TryGetValue(tweener, out Coroutine coroutine))
             {
                 Solver.StopCoroutine(coroutine);
                 Solver._tweens.Remove(tweener);
+                Dispose(tweener);
             }
         }
 
         public static void StopAllTweeners()
         {
-            foreach (Coroutine coroutine in Solver._tweens.Values)
+            foreach (var tween in Solver._tweens)
             {
-                Solver.StopCoroutine(coroutine);
+                Solver.StopCoroutine(tween.Value);
+                Dispose(tween.Key);
             }
             Solver._tweens.Clear();
         }

@@ -1,13 +1,28 @@
 using System.Collections;
 using UnityEngine;
 
-
 namespace THEBADDEST.Tweening
 {
-
-
+	/// <summary>
+	/// A coroutine-based implementation of the Tweener class.
+	/// Uses Unity's coroutine system for smooth tweening operations.
+	/// </summary>
 	public class CorotineTweener : Tweener
 	{
+		#region Private Fields
+		private TweenerEasing.Function cachedEasingFunction;
+		private WaitForEndOfFrame waitForEndOfFrame;
+		private WaitForSeconds waitForSeconds;
+		private WaitForSecondsRealtime waitForSecondsRealtime;
+		private float cachedDelay;
+		#endregion
+
+		public CorotineTweener()
+		{
+			waitForEndOfFrame = new WaitForEndOfFrame();
+			waitForSeconds = new WaitForSeconds(0);
+			waitForSecondsRealtime = new WaitForSecondsRealtime(0);
+		}
 
 		public override void Lerp(LerpDelegate lerp, float duration)
 		{
@@ -17,22 +32,39 @@ namespace THEBADDEST.Tweening
 
 		public override IEnumerator WaitForCompletion()
 		{
-			while (isPlaying)
-			{
-				yield return null;
-			}
+			yield return new WaitUntil(() => !isPlaying);
 		}
 
 		protected override void CalculateDeltaTime()
 		{
 			deltaTime = independentTime ? Time.unscaledDeltaTime : Time.deltaTime;
 		}
+		
 
 		private IEnumerator LerpCoroutineInternal(LerpDelegate lerp, float duration)
 		{
 			isPlaying = true;
-			yield return independentTime ? new WaitForSecondsRealtime(delay) : new WaitForSeconds(delay);
-			int loopsCount = this.loops;
+			isPaused = false;
+			yield return waitForEndOfFrame; // Wait one frame to ensure all settings are properly set
+
+			cachedEasingFunction = GetEaseFunction(); // Cache easing function after frame delay
+
+			if (delay > 0)
+			{
+				cachedDelay = delay;
+				if (independentTime)
+				{
+					waitForSecondsRealtime = new WaitForSecondsRealtime(cachedDelay);
+					yield return waitForSecondsRealtime;
+				}
+				else
+				{
+					waitForSeconds = new WaitForSeconds(cachedDelay);
+					yield return waitForSeconds;
+				}
+			}
+
+			int loopsCount = loops;
 			if (loopType == LoopType.Linear)
 			{
 				while (loopsCount > 0 || loops == -1)
@@ -53,31 +85,37 @@ namespace THEBADDEST.Tweening
 					loopsCount--;
 				}
 			}
+
+			TweenerSolver.StopTweener(this);
 			isPlaying = false;
-			onCompleteAllLoopsDelegate?.Invoke();
-			
+			isPaused = false;
+			InvokeOnCompleteAllLoops();
 		}
 
 		private IEnumerator LerpCoroutineSingleInternal(LerpDelegate lerp, float duration)
 		{
-			TweenerEasing.Function easingFunction = GetEaseFunction();
-			float                  value          = 0.0f;
-			float                  intercept      = 0;
+			float value = 0f;
+			float intercept = 0f;
+			float inverseDuration = 1f / duration;
+
 			while (value <= 1f)
 			{
-				yield return null;
+				if (isPaused)
+				{
+					yield return waitForEndOfFrame;
+					continue;
+				}
+
+				yield return waitForEndOfFrame;
 				CalculateDeltaTime();
-				value += deltaTime / duration;
-				intercept = easingFunction.Invoke(0, 1, value);
+				value += deltaTime * inverseDuration;
+				intercept = cachedEasingFunction.Invoke(0, 1, value);
 				lerp.Invoke(intercept);
 			}
-			yield return null;
-			value = 1f;
-			lerp.Invoke(easingFunction.Invoke(0, 1, value));
-			onCompleteIterationDelegate?.Invoke();
+
+			yield return waitForEndOfFrame;
+			lerp.Invoke(cachedEasingFunction.Invoke(0, 1, 1f));
+			InvokeOnCompleteIteration();
 		}
-		
 	}
-
-
 }

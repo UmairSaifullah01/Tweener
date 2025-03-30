@@ -16,18 +16,24 @@ namespace THEBADDEST.Tweening
 	{
 		public event CallbackDelegate OnCompleteAllLoops;
 		public event CallbackDelegate OnCompleteIteration;
-		ITweener                SetEase(TweenerEasing.Ease ease);
+		ITweener SetEase(TweenerEasing.Ease ease);
 
 		ITweener SetEase(AnimationCurve easeCurve);
 
 		ITweener SetLoops(int loops, LoopType loopType);
 
-		Tweener  SetDelay(float seconds);
-		Tweener  SetTime(bool independent=false);
-		void Lerp(LerpDelegate      lerp, float duration);
+		Tweener SetDelay(float seconds);
+		Tweener SetTime(bool independent = false);
+		void Lerp(LerpDelegate lerp, float duration);
 
-		void         Reverse();
-		 IEnumerator WaitForCompletion();
+		void Reverse();
+		void Kill();
+
+		void Pause();
+
+		void Resume();
+
+		IEnumerator WaitForCompletion();
 
 	}
 
