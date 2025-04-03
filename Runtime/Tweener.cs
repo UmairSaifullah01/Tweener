@@ -140,7 +140,7 @@ namespace THEBADDEST.Tweening
 
 		public virtual void Resume()
 		{
-			if (!isPlaying && isPaused)
+			if (isPlaying && isPaused)
 			{
 				isPaused = false;
 			}

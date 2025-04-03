@@ -74,7 +74,6 @@ namespace THEBADDEST.Tweening
             if (isPlaying) yield break;
             isPlaying = true;
             Debug.Log("TweenerSequence: Play started.");
-            yield return null;
             // First, pause all tweens
             foreach (var group in tweenGroups)
             {
@@ -88,7 +87,7 @@ namespace THEBADDEST.Tweening
                 }
             }
 
-           
+            yield return null;
             // Play each group in sequence
             foreach (var group in tweenGroups)
             {
