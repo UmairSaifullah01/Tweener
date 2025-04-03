@@ -141,7 +141,35 @@ namespace THEBADDEST.Tweening
 			}, duration);
 			return tweener;
 		}
+/// <summary>
+/// Scales the transform's local scale to a peak value and back in a pulsing motion.
+/// </summary>
+/// <param name="target">The transform to animate</param>
+/// <param name="scaleFactor">The factor by which the transform's scale is multiplied at the peak</param>
+/// <param name="duration">Duration of the pulse animation</param>
+/// <returns>The tweener instance</returns>
+		public static ITweener PulseScale(this Transform target, float scaleFactor, float duration)
+		{
+			if (target == null) return null;
 
+			Vector3 start = target.localScale;
+			Vector3 peak  = start * scaleFactor;
+
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+
+				// Create a parabolic arc using quadratic Bezier curve
+				float t2 = t * t;
+				Vector3 scale = (1 - t) * (1 - t) * start    +
+				                2       * (1 - t) * t * peak +
+				                t2      * start;
+
+				target.localScale = scale;
+			}, duration);
+			return tweener;
+		}
 		/// <summary>
 		/// Creates a vertical jump with multiple bounces.
 		/// </summary>
