@@ -19,8 +19,8 @@ namespace THEBADDEST.Tweening
 			{
 				grapic = target.GetComponent<Image>();
 			}
+			tweener=grapic.FadeImage(alphaStartValue, alphaEndValue, duration);
 			Init();
-			tweener.FadeImage(grapic, @alphaStartValue, @alphaEndValue, duration);
 			yield return base.Play(target);
 		}
 

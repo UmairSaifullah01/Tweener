@@ -1,53 +1,139 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 
 namespace THEBADDEST.Tweening
 {
 
-
 	public static class TweenerExtensions
 	{
 
-		public static ITweener Move(this ITweener tweener, Transform target, Vector3 start, Vector3 end, float duration)
+		public static ITweener OnComplete(this ITweener tweener, CallbackDelegate onComplete)
 		{
-			var command = new MoveStartEndCommand(tweener, target, start, end, duration);
-			command.Execute();
+			tweener.OnCompleteAllLoops += onComplete.Invoke;
+			return tweener;
+		}
+		
+		public static ITweener ColorBlockTween(this Renderer target, Color start, Color end, float duration, string colorPropertyName = "_Color")
+		{
+			var tweener               = TweenerSolver.Create();
+			var materialPropertyBlock = new MaterialPropertyBlock();
+			target.GetPropertyBlock(materialPropertyBlock);
+			tweener.Lerp(t =>
+			{
+				materialPropertyBlock.SetColor(colorPropertyName, Color.Lerp(start, end, t));
+				target.SetPropertyBlock(materialPropertyBlock);
+			}, duration);
+			return tweener;
+		}
+		public static ITweener FieldOfViewTween(this Camera target, float start, float end, float duration)
+		{
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				target.fieldOfView = Mathf.Lerp(start, end, t);
+			}, duration);
 			return tweener;
 		}
 
-		public static ITweener MoveLocal(this ITweener tweener, Transform target, Vector3 start, Vector3 end, float duration)
+		public static ITweener OrthographicSizeTween(this Camera target, float start, float end, float duration)
 		{
-			var command = new MoveLocalStartEndCommand(tweener, target, start, end, duration);
-			command.Execute();
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				target.orthographicSize = Mathf.Lerp(start, end, t);
+			}, duration);
+			return tweener;
+		}
+		public static ITweener FadeImage(this Graphic target, float start, float end, float duration)
+		{
+			var tweener = TweenerSolver.Create();
+			var color   = target.color;
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				color.a      = Mathf.Lerp(start, end, t);
+				target.color = color;
+			}, duration);
+			return tweener;
+		}
+		public static ITweener FillAmountImage(this Image target, float start, float end, float duration)
+		{
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				target.fillAmount = Mathf.Lerp(start, end, t);
+			}, duration);
+			return tweener;
+		}
+		public static ITweener ColorTween(this Graphic target, Color start, Color end, float duration)
+		{
+			var tweener = TweenerSolver.Create();
+			var color   = target.color;
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				color        = Color.Lerp(start, end, t);
+				target.color = color;
+			}, duration);
 			return tweener;
 		}
 
-		public static ITweener Scale(this ITweener tweener, Transform target, Vector3 start, Vector3 end, float duration)
+		public static ITweener SizeTween(this RectTransform target, Vector2 start, Vector2 end, float duration)
 		{
-			var command = new ScaleStartEndCommand(tweener, target, start, end, duration);
-			command.Execute();
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				target.sizeDelta = Vector2.Lerp(start, end, t);
+			}, duration);
 			return tweener;
 		}
 
-		public static ITweener Rotate(this ITweener tweener, Transform target, Vector3 start, Vector3 end, float duration)
+		public static ITweener AnchorTween(this RectTransform target, Vector2 start, Vector2 end, float duration)
 		{
-			var command = new RotateStartEndCommand(tweener, target, start, end, duration);
-			command.Execute();
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				target.anchorMin = Vector2.Lerp(start, end, t);
+				target.anchorMax = Vector2.Lerp(start, end, t);
+			}, duration);
 			return tweener;
 		}
 
-		public static ITweener RotateLocal(this ITweener tweener, Transform target, Vector3 start, Vector3 end, float duration)
+		public static ITweener PivotTween(this RectTransform target, Vector2 start, Vector2 end, float duration)
 		{
-			var command = new RotateLocalStartEndCommand(tweener, target, start, end, duration);
-			command.Execute();
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				target.pivot = Vector2.Lerp(start, end, t);
+			}, duration);
 			return tweener;
 		}
-
-		public static ITweener FadeImage(this ITweener tweener, Graphic target, float start, float end, float duration)
+		public static ITweener AnchoredPositionTween(this RectTransform target,Vector2 start, Vector2 end, float duration)
 		{
-			var command = new FadeImageCommand(tweener, target, start, end, duration);
-			command.Execute();
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				target.anchoredPosition = Vector2.Lerp(start, end, t);
+			}, duration);
+			return tweener;
+		}
+		public static ITweener MaterialPropertyTween(this Renderer target, string propertyName, float start, float end, float duration)
+		{
+			var tweener  = TweenerSolver.Create();
+			var material = target.material;
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				material.SetFloat(propertyName, Mathf.Lerp(start, end, t));
+			}, duration);
 			return tweener;
 		}
 

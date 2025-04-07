@@ -12,7 +12,8 @@ namespace THEBADDEST.Tweening
 
 		public override IEnumerator Play(Transform target)
 		{
-			tweener.Rotate(target, @from, @to, duration);
+			tweener=target.Rotate(from, to, duration);
+			Init();
 			yield return base.Play(target);
 		}
 

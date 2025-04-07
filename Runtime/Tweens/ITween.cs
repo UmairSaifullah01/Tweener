@@ -9,7 +9,7 @@ namespace THEBADDEST.Tweening
 	public interface ITween
 	{
 
-		Tweener tweener  { get; }
+		ITweener tweener  { get; }
 		int     priority { get; }
 
 		float delay { get; set; }
