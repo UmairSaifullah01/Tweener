@@ -33,6 +33,8 @@ namespace THEBADDEST.Tweening
 
 		void Resume();
 
+		 void Reset();
+
 		IEnumerator WaitForCompletion();
 
 	}

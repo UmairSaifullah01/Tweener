@@ -37,7 +37,7 @@ namespace THEBADDEST.Tweening
 		protected bool isPlaying = false;
 		protected LerpDelegate lerpAction = null;
 		protected float duration = 0;
-		protected bool isPaused =false;
+		protected bool isPaused = false;
 		#endregion
 
 		#region Properties
@@ -110,7 +110,7 @@ namespace THEBADDEST.Tweening
 				throw new System.ArgumentException("Duration must be greater than 0", nameof(duration));
 
 			this.lerpAction = lerp ?? throw new System.ArgumentNullException(nameof(lerp));
-			this.duration   = duration;
+			this.duration = duration;
 		}
 
 		public void Reverse()
@@ -128,6 +128,29 @@ namespace THEBADDEST.Tweening
 			isPlaying = false;
 			TweenerSolver.StopTweener(this);
 			onCompleteAllLoopsDelegate?.Invoke();
+		}
+
+		/// <summary>
+		/// Resets all fields to their default values.
+		/// </summary>
+		 public virtual void Reset()
+		{
+			// Reset events
+			onCompleteAllLoopsDelegate = null;
+			onCompleteIterationDelegate = null;
+
+			// Reset protected fields
+			loops = 1;
+			loopType = LoopType.Linear;
+			ease = TweenerEasing.Ease.Linear;
+			easeCurve = AnimationCurve.Linear(0, 0, 1, 1);
+			deltaTime = Time.deltaTime;
+			independentTime = false;
+			delay = 0.0f;
+			isPlaying = false;
+			lerpAction = null;
+			duration = 0;
+			isPaused = false;
 		}
 
 		public virtual void Pause()
@@ -156,6 +179,7 @@ namespace THEBADDEST.Tweening
 		protected void InvokeOnCompleteAllLoops()
 		{
 			onCompleteAllLoopsDelegate?.Invoke();
+
 		}
 	}
 }
