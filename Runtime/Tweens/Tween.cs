@@ -17,7 +17,7 @@ namespace THEBADDEST.Tweening
 		[SerializeField] protected LoopType loopType = LoopType.Linear;
 		
 		public event Action onComplete;
-		public Tweener tweener { get; protected set; }
+		public ITweener tweener { get; protected set; }
 
 		public int priority
 		{
@@ -31,8 +31,7 @@ namespace THEBADDEST.Tweening
 		}
 		protected void Init()
 		{
-			tweener = new CorotineTweener();
-			tweener.SetEase(ease).SetLoops(loops, loopType).SetEase(easeCurve).SetDelay(delay);
+			tweener.SetLoops(loops, loopType).SetEase(easeCurve).SetEase(ease).SetDelay(delay);
 		}
 		public virtual IEnumerator Play(Transform target)
 		{
