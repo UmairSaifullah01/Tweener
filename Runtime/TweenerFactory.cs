@@ -23,7 +23,9 @@ namespace THEBADDEST.Tweening
 
 		public ITweener Create()
 		{
-			return pool.Get();
+			ITweener tweener = pool.Get();
+			tweener.Reset();
+			return tweener;
 		}
 
 		public void Dispose(ITweener tweener)
