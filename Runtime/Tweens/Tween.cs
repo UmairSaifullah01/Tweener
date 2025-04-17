@@ -29,16 +29,22 @@ namespace THEBADDEST.Tweening
 			get => m_delay;
 			set => m_delay = value;
 		}
-		protected void Init()
-		{
-			tweener.SetLoops(loops, loopType).SetEase(easeCurve).SetEase(ease).SetDelay(delay);
-		}
+		[Obsolete("This method is obsolete. Use WaitForCompletion instead.")]
 		public virtual IEnumerator Play(Transform target)
 		{
 			yield return tweener.WaitForCompletion();
 			onComplete?.Invoke();
 		}
 
+		public virtual IEnumerator WaitForCompletion()
+		{
+			yield return tweener.WaitForCompletion();
+		}
+		public virtual void PlayWithTarget(Transform target)
+		{
+			tweener.SetLoops(loops, loopType).SetEase(easeCurve).SetEase(ease).SetDelay(delay);
+			tweener.OnCompleteAllLoops += () => onComplete?.Invoke();
+		}
 	}
 	public abstract class FromToTween : Tween
 	{

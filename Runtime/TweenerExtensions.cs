@@ -8,11 +8,7 @@ namespace THEBADDEST.Tweening
 	public static class TweenerExtensions
 	{
 
-		public static ITweener OnComplete(this ITweener tweener, CallbackDelegate onComplete)
-		{
-			tweener.OnCompleteAllLoops += onComplete.Invoke;
-			return tweener;
-		}
+		
 		
 		public static ITweener ColorBlockTween(this Renderer target, Color start, Color end, float duration, string colorPropertyName = "_Color")
 		{

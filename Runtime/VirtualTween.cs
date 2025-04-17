@@ -56,7 +56,7 @@ namespace THEBADDEST.Tweening
         public static ITweener Float(LerpDelegate lerpDelegate, float duration, float start = 0f, float end = 1f)
         {
             var tweener = TweenerSolver.Create();
-            tweener.Lerp(t => { lerpDelegate?.Invoke(Mathf.Lerp(start, end, t)); }, duration);
+            tweener.Lerp(t => { lerpDelegate?.Invoke(Mathf.LerpUnclamped(start, end, t)); }, duration);
             return tweener;
         }
 

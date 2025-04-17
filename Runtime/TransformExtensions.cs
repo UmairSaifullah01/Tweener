@@ -26,7 +26,30 @@ namespace THEBADDEST.Tweening
 			}, duration);
 			return tweener;
 		}
-
+		public static ITweener SmoothFollow(this Transform target, Transform toFollow, float smoothTime)
+		{
+			var     tweener  = TweenerSolver.Create();
+			Vector3 velocity = Vector3.zero;
+    
+			tweener.Lerp(t => {
+				if (target == null || toFollow == null) return;
+				target.position = Vector3.SmoothDamp(target.position, toFollow.position, ref velocity, smoothTime);
+			}, float.MaxValue);
+    
+			return tweener;
+		}
+		public static ITweener SmoothFollow(this Transform target, Vector3 start, Vector3 end, float smoothTime)
+		{
+			var     tweener  = TweenerSolver.Create();
+			Vector3 velocity = Vector3.zero;
+    
+			tweener.Lerp(t => {
+				if (target == null) return;
+				target.position = Vector3.SmoothDamp(start, end, ref velocity, smoothTime);
+			}, float.MaxValue);
+    
+			return tweener;
+		}
 		public static ITweener Scale(this Transform target, Vector3 start, Vector3 end, float duration)
 		{
 			var tweener = TweenerSolver.Create();
