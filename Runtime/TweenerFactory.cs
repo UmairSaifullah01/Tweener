@@ -24,25 +24,29 @@ namespace THEBADDEST.Tweening
 		public ITweener Create()
 		{
 			ITweener tweener = pool.Get();
-			tweener.Reset();
+			tweeners.Add(tweener);
 			return tweener;
 		}
 
 		public void Dispose(ITweener tweener)
 		{
 			pool.Release(tweener);
+			tweeners.Remove(tweener);
 		}
 
 		void Get(ITweener tweener)
 		{
+			tweener.Reset();
 		}
 
 		void Release(ITweener tweener)
 		{
+			tweener.Reset();
 		}
 
 		void OnDestroy(ITweener tweener)
 		{
+			tweener.Reset();
 		}
 
 	}

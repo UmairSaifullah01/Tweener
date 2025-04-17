@@ -22,8 +22,8 @@ namespace THEBADDEST.Tweening
 
 		ITweener SetLoops(int loops, LoopType loopType);
 
-		Tweener SetDelay(float seconds);
-		Tweener SetTime(bool independent = false);
+		ITweener SetDelay(float seconds);
+		ITweener SetTime(bool independent = false);
 		void Lerp(LerpDelegate lerp, float duration);
 
 		void Reverse();
@@ -36,6 +36,8 @@ namespace THEBADDEST.Tweening
 		 void Reset();
 
 		IEnumerator WaitForCompletion();
+
+		ITweener OnComplete(CallbackDelegate onComplete, bool singleIteration = false);
 
 	}
 

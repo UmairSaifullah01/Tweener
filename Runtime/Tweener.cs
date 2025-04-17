@@ -7,7 +7,7 @@ namespace THEBADDEST.Tweening
 	/// Base class for all tweeners in the system.
 	/// Provides core tweening functionality and common properties.
 	/// </summary>
-	public abstract class Tweener : ITweener
+	internal abstract class Tweener : ITweener
 	{
 		#region Events
 		private CallbackDelegate onCompleteAllLoopsDelegate;
@@ -89,7 +89,7 @@ namespace THEBADDEST.Tweening
 			return this;
 		}
 
-		public Tweener SetDelay(float seconds)
+		public ITweener SetDelay(float seconds)
 		{
 			if (seconds < 0)
 				throw new System.ArgumentException("Delay cannot be negative", nameof(seconds));
@@ -98,7 +98,7 @@ namespace THEBADDEST.Tweening
 			return this;
 		}
 
-		public Tweener SetTime(bool independent = false)
+		public ITweener SetTime(bool independent = false)
 		{
 			independentTime = independent;
 			return this;
@@ -171,6 +171,12 @@ namespace THEBADDEST.Tweening
 
 		public abstract IEnumerator WaitForCompletion();
 
+		public virtual ITweener OnComplete( CallbackDelegate onComplete, bool singleIteration = false)
+		{
+			if(singleIteration) onCompleteIterationDelegate += onComplete.Invoke;
+			else onCompleteAllLoopsDelegate += onComplete.Invoke;
+			return this;
+		}
 		protected void InvokeOnCompleteIteration()
 		{
 			onCompleteIterationDelegate?.Invoke();

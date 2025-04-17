@@ -15,15 +15,19 @@ namespace THEBADDEST.Tweening
 		Image                  grapic;
 		public override IEnumerator Play(Transform target)
 		{
+			PlayWithTarget(target);
+			yield return base.Play(target);
+		}
+
+		public override void PlayWithTarget(Transform target)
+		{
 			if (grapic ==null)
 			{
 				grapic = target.GetComponent<Image>();
 			}
 			tweener=grapic.FadeImage(alphaStartValue, alphaEndValue, duration);
-			Init();
-			yield return base.Play(target);
+			base.PlayWithTarget(target);
 		}
-
 	}
 
 

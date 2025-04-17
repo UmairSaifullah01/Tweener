@@ -10,9 +10,14 @@ namespace THEBADDEST.Tweening
         [SerializeField] AnimationClip animClip;
         public override IEnumerator Play(Transform target)
         {
-            Init();
-            tweener.Lerp(t => animClip.SampleAnimation(target.gameObject, t * animClip.length), duration);
+            tweener=VirtualTween.Float(t => animClip.SampleAnimation(target.gameObject, t * animClip.length), duration);
+            base.PlayWithTarget(target);
             yield return base.Play(target);
+        }
+        public override void PlayWithTarget(Transform target)
+        {
+            tweener=VirtualTween.Float(t => animClip.SampleAnimation(target.gameObject, t * animClip.length), duration);
+            base.PlayWithTarget(target);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace THEBADDEST.Tweening
 	/// An asynchronous implementation of the Tweener class.
 	/// Uses C# async/await for tweening operations.
 	/// </summary>
-	public class AsyncTweener : Tweener
+	internal class AsyncTweener : Tweener
 	{
 		#region Private Fields
 		private Task<ITweener> task;
