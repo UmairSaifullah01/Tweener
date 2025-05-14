@@ -40,6 +40,10 @@ namespace THEBADDEST.Tweening
             Solver._tweens[tweener] = Solver.StartCoroutine(coroutine);
         }
 
+        public static void PlayTweener(IEnumerator coroutine)
+        {
+            Solver.StartCoroutine(coroutine);
+        }
         public static void StopTweener(ITweener tweener)
         {
             if (tweener == null) return;
