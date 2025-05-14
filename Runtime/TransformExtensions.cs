@@ -1,31 +1,183 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-
 namespace THEBADDEST.Tweening
 {
-
+	public enum TransformAxis
+	{
+		All,
+		X,
+		Y,
+		Z,
+		XY,
+		XZ,
+		YZ
+	}
 
 	public static class TransformExtensions
 	{
-
-		public static ITweener Move(this Transform target, Vector3 start, Vector3 end, float duration)
-		{
-			var tweener = TweenerSolver.Create();
-			tweener.Lerp(t => target.position = Vector3.Lerp(start, end, t), duration);
-			return tweener;
-		}
-
-		public static ITweener MoveLocal(this Transform target, Vector3 start, Vector3 end, float duration)
+		/// <summary>
+		/// Moves the transform from start to end position over the specified duration.
+		/// </summary>
+		/// <param name="target">The transform to move</param>
+		/// <param name="start">Starting position</param>
+		/// <param name="end">Ending position</param>
+		/// <param name="duration">Duration of the movement</param>
+		/// <param name="axis">Which axis to move on (default: All)</param>
+		/// <returns>The tweener instance</returns>
+		public static ITweener Move(this Transform target, Vector3 start, Vector3 end, float duration, TransformAxis axis = TransformAxis.All)
 		{
 			var tweener = TweenerSolver.Create();
 			tweener.Lerp(t =>
 			{
 				if (target == null) return;
-				target.localPosition = Vector3.Lerp(start, end, t);
+				Vector3 newPosition = target.position;
+				switch (axis)
+				{
+					case TransformAxis.X:
+						newPosition.x = Mathf.Lerp(start.x, end.x, t);
+						break;
+					case TransformAxis.Y:
+						newPosition.y = Mathf.Lerp(start.y, end.y, t);
+						break;
+					case TransformAxis.Z:
+						newPosition.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					case TransformAxis.XY:
+						newPosition.x = Mathf.Lerp(start.x, end.x, t);
+						newPosition.y = Mathf.Lerp(start.y, end.y, t);
+						break;
+					case TransformAxis.XZ:
+						newPosition.x = Mathf.Lerp(start.x, end.x, t);
+						newPosition.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					case TransformAxis.YZ:
+						newPosition.y = Mathf.Lerp(start.y, end.y, t);
+						newPosition.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					default:
+						newPosition = Vector3.Lerp(start, end, t);
+						break;
+				}
+				target.position = newPosition;
 			}, duration);
 			return tweener;
 		}
+
+		/// <summary>
+		/// Moves the transform along the X axis from start to end position over the specified duration.
+		/// </summary>
+		public static ITweener MoveX(this Transform target, float start, float end, float duration)
+		{
+			return target.Move(new Vector3(start, target.position.y, target.position.z),
+							 new Vector3(end, target.position.y, target.position.z),
+							 duration,
+							 TransformAxis.X);
+		}
+
+		/// <summary>
+		/// Moves the transform along the Y axis from start to end position over the specified duration.
+		/// </summary>
+		public static ITweener MoveY(this Transform target, float start, float end, float duration)
+		{
+			return target.Move(new Vector3(target.position.x, start, target.position.z),
+							 new Vector3(target.position.x, end, target.position.z),
+							 duration,
+							 TransformAxis.Y);
+		}
+
+		/// <summary>
+		/// Moves the transform along the Z axis from start to end position over the specified duration.
+		/// </summary>
+		public static ITweener MoveZ(this Transform target, float start, float end, float duration)
+		{
+			return target.Move(new Vector3(target.position.x, target.position.y, start),
+							 new Vector3(target.position.x, target.position.y, end),
+							 duration,
+							 TransformAxis.Z);
+		}
+
+		/// <summary>
+		/// Moves the transform locally from start to end position over the specified duration.
+		/// </summary>
+		/// <param name="target">The transform to move</param>
+		/// <param name="start">Starting local position</param>
+		/// <param name="end">Ending local position</param>
+		/// <param name="duration">Duration of the movement</param>
+		/// <param name="axis">Which axis to move on (default: All)</param>
+		/// <returns>The tweener instance</returns>
+		public static ITweener MoveLocal(this Transform target, Vector3 start, Vector3 end, float duration, TransformAxis axis = TransformAxis.All)
+		{
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				Vector3 newPosition = target.localPosition;
+				switch (axis)
+				{
+					case TransformAxis.X:
+						newPosition.x = Mathf.Lerp(start.x, end.x, t);
+						break;
+					case TransformAxis.Y:
+						newPosition.y = Mathf.Lerp(start.y, end.y, t);
+						break;
+					case TransformAxis.Z:
+						newPosition.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					case TransformAxis.XY:
+						newPosition.x = Mathf.Lerp(start.x, end.x, t);
+						newPosition.y = Mathf.Lerp(start.y, end.y, t);
+						break;
+					case TransformAxis.XZ:
+						newPosition.x = Mathf.Lerp(start.x, end.x, t);
+						newPosition.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					case TransformAxis.YZ:
+						newPosition.y = Mathf.Lerp(start.y, end.y, t);
+						newPosition.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					default:
+						newPosition = Vector3.Lerp(start, end, t);
+						break;
+				}
+				target.localPosition = newPosition;
+			}, duration);
+			return tweener;
+		}
+
+		/// <summary>
+		/// Moves the transform locally along the X axis from start to end position over the specified duration.
+		/// </summary>
+		public static ITweener MoveLocalX(this Transform target, float start, float end, float duration)
+		{
+			return target.MoveLocal(new Vector3(start, target.localPosition.y, target.localPosition.z),
+								  new Vector3(end, target.localPosition.y, target.localPosition.z),
+								  duration,
+								  TransformAxis.X);
+		}
+
+		/// <summary>
+		/// Moves the transform locally along the Y axis from start to end position over the specified duration.
+		/// </summary>
+		public static ITweener MoveLocalY(this Transform target, float start, float end, float duration)
+		{
+			return target.MoveLocal(new Vector3(target.localPosition.x, start, target.localPosition.z),
+								  new Vector3(target.localPosition.x, end, target.localPosition.z),
+								  duration,
+								  TransformAxis.Y);
+		}
+
+		/// <summary>
+		/// Moves the transform locally along the Z axis from start to end position over the specified duration.
+		/// </summary>
+		public static ITweener MoveLocalZ(this Transform target, float start, float end, float duration)
+		{
+			return target.MoveLocal(new Vector3(target.localPosition.x, target.localPosition.y, start),
+								  new Vector3(target.localPosition.x, target.localPosition.y, end),
+								  duration,
+								  TransformAxis.Z);
+		}
+
 		public static ITweener SmoothFollow(this Transform target, Transform toFollow, float smoothTime)
 		{
 			var     tweener  = TweenerSolver.Create();
@@ -50,39 +202,248 @@ namespace THEBADDEST.Tweening
     
 			return tweener;
 		}
-		public static ITweener Scale(this Transform target, Vector3 start, Vector3 end, float duration)
+		/// <summary>
+		/// Scales the transform from start to end scale over the specified duration.
+		/// </summary>
+		/// <param name="target">The transform to scale</param>
+		/// <param name="start">Starting scale</param>
+		/// <param name="end">Ending scale</param>
+		/// <param name="duration">Duration of the scaling</param>
+		/// <param name="axis">Which axis to scale on (default: All)</param>
+		/// <returns>The tweener instance</returns>
+		public static ITweener Scale(this Transform target, Vector3 start, Vector3 end, float duration, TransformAxis axis = TransformAxis.All)
 		{
 			var tweener = TweenerSolver.Create();
 			tweener.Lerp(t =>
 			{
 				if (target == null) return;
-				target.localScale = Vector3.Lerp(start, end, t);
+				Vector3 newScale = target.localScale;
+				switch (axis)
+				{
+					case TransformAxis.X:
+						newScale.x = Mathf.Lerp(start.x, end.x, t);
+						break;
+					case TransformAxis.Y:
+						newScale.y = Mathf.Lerp(start.y, end.y, t);
+						break;
+					case TransformAxis.Z:
+						newScale.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					case TransformAxis.XY:
+						newScale.x = Mathf.Lerp(start.x, end.x, t);
+						newScale.y = Mathf.Lerp(start.y, end.y, t);
+						break;
+					case TransformAxis.XZ:
+						newScale.x = Mathf.Lerp(start.x, end.x, t);
+						newScale.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					case TransformAxis.YZ:
+						newScale.y = Mathf.Lerp(start.y, end.y, t);
+						newScale.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					default:
+						newScale = Vector3.Lerp(start, end, t);
+						break;
+				}
+				target.localScale = newScale;
 			}, duration);
 			return tweener;
 		}
 
-		public static ITweener Rotate(this Transform target, Vector3 start, Vector3 end, float duration)
+		/// <summary>
+		/// Scales the transform along the X axis from start to end scale over the specified duration.
+		/// </summary>
+		public static ITweener ScaleX(this Transform target, float start, float end, float duration)
+		{
+			return target.Scale(new Vector3(start, target.localScale.y, target.localScale.z),
+							  new Vector3(end, target.localScale.y, target.localScale.z),
+							  duration,
+							  TransformAxis.X);
+		}
+
+		/// <summary>
+		/// Scales the transform along the Y axis from start to end scale over the specified duration.
+		/// </summary>
+		public static ITweener ScaleY(this Transform target, float start, float end, float duration)
+		{
+			return target.Scale(new Vector3(target.localScale.x, start, target.localScale.z),
+							  new Vector3(target.localScale.x, end, target.localScale.z),
+							  duration,
+							  TransformAxis.Y);
+		}
+
+		/// <summary>
+		/// Scales the transform along the Z axis from start to end scale over the specified duration.
+		/// </summary>
+		public static ITweener ScaleZ(this Transform target, float start, float end, float duration)
+		{
+			return target.Scale(new Vector3(target.localScale.x, target.localScale.y, start),
+							  new Vector3(target.localScale.x, target.localScale.y, end),
+							  duration,
+							  TransformAxis.Z);
+		}
+
+		/// <summary>
+		/// Rotates the transform from start to end rotation over the specified duration.
+		/// </summary>
+		/// <param name="target">The transform to rotate</param>
+		/// <param name="start">Starting rotation in Euler angles</param>
+		/// <param name="end">Ending rotation in Euler angles</param>
+		/// <param name="duration">Duration of the rotation</param>
+		/// <param name="axis">Which axis to rotate on (default: All)</param>
+		/// <returns>The tweener instance</returns>
+		public static ITweener Rotate(this Transform target, Vector3 start, Vector3 end, float duration, TransformAxis axis = TransformAxis.All)
 		{
 			var tweener = TweenerSolver.Create();
 			tweener.Lerp(t =>
 			{
 				if (target == null) return;
-				target.eulerAngles = Vector3.Lerp(start, end, t);
+				Vector3 newRotation = target.eulerAngles;
+				switch (axis)
+				{
+					case TransformAxis.X:
+						newRotation.x = Mathf.Lerp(start.x, end.x, t);
+						break;
+					case TransformAxis.Y:
+						newRotation.y = Mathf.Lerp(start.y, end.y, t);
+						break;
+					case TransformAxis.Z:
+						newRotation.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					case TransformAxis.XY:
+						newRotation.x = Mathf.Lerp(start.x, end.x, t);
+						newRotation.y = Mathf.Lerp(start.y, end.y, t);
+						break;
+					case TransformAxis.XZ:
+						newRotation.x = Mathf.Lerp(start.x, end.x, t);
+						newRotation.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					case TransformAxis.YZ:
+						newRotation.y = Mathf.Lerp(start.y, end.y, t);
+						newRotation.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					default:
+						newRotation = Vector3.Lerp(start, end, t);
+						break;
+				}
+				target.eulerAngles = newRotation;
 			}, duration);
 			return tweener;
 		}
 
-		public static ITweener RotateLocal(this Transform target, Vector3 start, Vector3 end, float duration)
+		/// <summary>
+		/// Rotates the transform around the X axis from start to end angle over the specified duration.
+		/// </summary>
+		public static ITweener RotateX(this Transform target, float start, float end, float duration)
+		{
+			return target.Rotate(new Vector3(start, target.eulerAngles.y, target.eulerAngles.z),
+							   new Vector3(end, target.eulerAngles.y, target.eulerAngles.z),
+							   duration,
+							   TransformAxis.X);
+		}
+
+		/// <summary>
+		/// Rotates the transform around the Y axis from start to end angle over the specified duration.
+		/// </summary>
+		public static ITweener RotateY(this Transform target, float start, float end, float duration)
+		{
+			return target.Rotate(new Vector3(target.eulerAngles.x, start, target.eulerAngles.z),
+							   new Vector3(target.eulerAngles.x, end, target.eulerAngles.z),
+							   duration,
+							   TransformAxis.Y);
+		}
+
+		/// <summary>
+		/// Rotates the transform around the Z axis from start to end angle over the specified duration.
+		/// </summary>
+		public static ITweener RotateZ(this Transform target, float start, float end, float duration)
+		{
+			return target.Rotate(new Vector3(target.eulerAngles.x, target.eulerAngles.y, start),
+							   new Vector3(target.eulerAngles.x, target.eulerAngles.y, end),
+							   duration,
+							   TransformAxis.Z);
+		}
+
+		/// <summary>
+		/// Rotates the transform locally from start to end rotation over the specified duration.
+		/// </summary>
+		/// <param name="target">The transform to rotate</param>
+		/// <param name="start">Starting local rotation in Euler angles</param>
+		/// <param name="end">Ending local rotation in Euler angles</param>
+		/// <param name="duration">Duration of the rotation</param>
+		/// <param name="axis">Which axis to rotate on (default: All)</param>
+		/// <returns>The tweener instance</returns>
+		public static ITweener RotateLocal(this Transform target, Vector3 start, Vector3 end, float duration, TransformAxis axis = TransformAxis.All)
 		{
 			var tweener = TweenerSolver.Create();
 			tweener.Lerp(t =>
 			{
 				if (target == null) return;
-				target.localEulerAngles = Vector3.Lerp(start, end, t);
+				Vector3 newRotation = target.localEulerAngles;
+				switch (axis)
+				{
+					case TransformAxis.X:
+						newRotation.x = Mathf.Lerp(start.x, end.x, t);
+						break;
+					case TransformAxis.Y:
+						newRotation.y = Mathf.Lerp(start.y, end.y, t);
+						break;
+					case TransformAxis.Z:
+						newRotation.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					case TransformAxis.XY:
+						newRotation.x = Mathf.Lerp(start.x, end.x, t);
+						newRotation.y = Mathf.Lerp(start.y, end.y, t);
+						break;
+					case TransformAxis.XZ:
+						newRotation.x = Mathf.Lerp(start.x, end.x, t);
+						newRotation.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					case TransformAxis.YZ:
+						newRotation.y = Mathf.Lerp(start.y, end.y, t);
+						newRotation.z = Mathf.Lerp(start.z, end.z, t);
+						break;
+					default:
+						newRotation = Vector3.Lerp(start, end, t);
+						break;
+				}
+				target.localEulerAngles = newRotation;
 			}, duration);
 			return tweener;
 		}
 
+		/// <summary>
+		/// Rotates the transform locally around the X axis from start to end angle over the specified duration.
+		/// </summary>
+		public static ITweener RotateLocalX(this Transform target, float start, float end, float duration)
+		{
+			return target.RotateLocal(new Vector3(start, target.localEulerAngles.y, target.localEulerAngles.z),
+									new Vector3(end, target.localEulerAngles.y, target.localEulerAngles.z),
+									duration,
+									TransformAxis.X);
+		}
+
+		/// <summary>
+		/// Rotates the transform locally around the Y axis from start to end angle over the specified duration.
+		/// </summary>
+		public static ITweener RotateLocalY(this Transform target, float start, float end, float duration)
+		{
+			return target.RotateLocal(new Vector3(target.localEulerAngles.x, start, target.localEulerAngles.z),
+									new Vector3(target.localEulerAngles.x, end, target.localEulerAngles.z),
+									duration,
+									TransformAxis.Y);
+		}
+
+		/// <summary>
+		/// Rotates the transform locally around the Z axis from start to end angle over the specified duration.
+		/// </summary>
+		public static ITweener RotateLocalZ(this Transform target, float start, float end, float duration)
+		{
+			return target.RotateLocal(new Vector3(target.localEulerAngles.x, target.localEulerAngles.y, start),
+									new Vector3(target.localEulerAngles.x, target.localEulerAngles.y, end),
+									duration,
+									TransformAxis.Z);
+		}
 
 		public static ITweener Jump(this Transform target, Vector3 start, Vector3 peak, Vector3 end, float duration)
 		{

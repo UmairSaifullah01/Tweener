@@ -38,6 +38,8 @@ namespace THEBADDEST.Tweening
 		IEnumerator WaitForCompletion();
 
 		ITweener OnComplete(CallbackDelegate onComplete, bool singleIteration = false);
+		
+		float Duration { get;  }
 
 	}
 

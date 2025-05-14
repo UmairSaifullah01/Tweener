@@ -75,10 +75,10 @@ namespace THEBADDEST.Tweening
 				loopsCount++;
 			}
 
-			TweenerSolver.StopTweener(this);
 			isPlaying = false;
 			isPaused  = false;
 			InvokeOnCompleteAllLoops();
+			TweenerSolver.StopTweener(this);
 		}
 
 		
