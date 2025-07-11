@@ -1,5 +1,8 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
+
 
 namespace THEBADDEST.Tweening
 {
@@ -282,7 +285,7 @@ namespace THEBADDEST.Tweening
 							  duration,
 							  TransformAxis.Z);
 		}
-
+		
 		/// <summary>
 		/// Rotates the transform from start to end rotation over the specified duration.
 		/// </summary>
@@ -293,6 +296,63 @@ namespace THEBADDEST.Tweening
 		/// <param name="axis">Which axis to rotate on (default: All)</param>
 		/// <returns>The tweener instance</returns>
 		public static ITweener Rotate(this Transform target, Vector3 start, Vector3 end, float duration, TransformAxis axis = TransformAxis.All)
+		{
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+
+				Vector3 newRotation = target.eulerAngles;
+
+				switch (axis)
+				{
+					case TransformAxis.X:
+						newRotation.x = Mathf.LerpAngle(start.x, end.x, t);
+						break;
+					case TransformAxis.Y:
+						newRotation.y = Mathf.LerpAngle(start.y, end.y, t);
+						break;
+					case TransformAxis.Z:
+						newRotation.z = Mathf.LerpAngle(start.z, end.z, t);
+						break;
+					case TransformAxis.XY:
+						newRotation.x = Mathf.LerpAngle(start.x, end.x, t);
+						newRotation.y = Mathf.LerpAngle(start.y, end.y, t);
+						break;
+					case TransformAxis.XZ:
+						newRotation.x = Mathf.LerpAngle(start.x, end.x, t);
+						newRotation.z = Mathf.LerpAngle(start.z, end.z, t);
+						break;
+					case TransformAxis.YZ:
+						newRotation.y = Mathf.LerpAngle(start.y, end.y, t);
+						newRotation.z = Mathf.LerpAngle(start.z, end.z, t);
+						break;
+					default:
+						newRotation = new Vector3(
+							Mathf.LerpAngle(start.x, end.x, t),
+							Mathf.LerpAngle(start.y, end.y, t),
+							Mathf.LerpAngle(start.z, end.z, t)
+						);
+						break;
+				}
+
+				target.eulerAngles = newRotation;
+
+			}, duration);
+
+			return tweener;
+		}
+
+		/// <summary>
+		/// Rotates the transform from start to end rotation over the specified duration.
+		/// </summary>
+		/// <param name="target">The transform to rotate</param>
+		/// <param name="start">Starting rotation in Euler angles</param>
+		/// <param name="end">Ending rotation in Euler angles</param>
+		/// <param name="duration">Duration of the rotation</param>
+		/// <param name="axis">Which axis to rotate on (default: All)</param>
+		/// <returns>The tweener instance</returns>
+		public static ITweener RotateLinear(this Transform target, Vector3 start, Vector3 end, float duration, TransformAxis axis = TransformAxis.All)
 		{
 			var tweener = TweenerSolver.Create();
 			tweener.Lerp(t =>
@@ -455,6 +515,7 @@ namespace THEBADDEST.Tweening
 		/// <returns>The tweener instance</returns>
 		public static ITweener RotateTowards(this Transform target, Vector3 targetPosition, float duration, Vector3? up = null)
 		{
+			if (up == null) throw new ArgumentNullException(nameof(up));
 			Vector3 direction = (targetPosition - target.position).normalized;
 			if (direction == Vector3.zero) return null;
 			
@@ -470,7 +531,7 @@ namespace THEBADDEST.Tweening
 			
 			return tweener;
 		}
-		public static ITweener RotateTowards(this Transform target,Vector3 targetRotation, float duration)
+		public static ITweener RotateTowards2(this Transform target,Vector3 targetRotation, float duration)
 		{
 			Quaternion startRotation = target.rotation;
 			var tweener = TweenerSolver.Create();
