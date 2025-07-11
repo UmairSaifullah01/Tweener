@@ -470,7 +470,18 @@ namespace THEBADDEST.Tweening
 			
 			return tweener;
 		}
-
+		public static ITweener RotateTowards(this Transform target,Vector3 targetRotation, float duration)
+		{
+			Quaternion startRotation = target.rotation;
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+				target.rotation = Quaternion.RotateTowards(startRotation, Quaternion.Euler( targetRotation), t);
+			}, duration);
+			
+			return tweener;
+		}
 		public static ITweener Jump(this Transform target, Vector3 start, Vector3 peak, Vector3 end, float duration)
 		{
 			var tweener = TweenerSolver.Create();
