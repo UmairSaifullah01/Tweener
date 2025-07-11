@@ -445,21 +445,29 @@ namespace THEBADDEST.Tweening
 									TransformAxis.Z);
 		}
 
-		public static ITweener Jump(this Transform target, Vector3 start, Vector3 peak, Vector3 end, float duration)
+		/// <summary>
+		/// Rotates the transform to look at the target position over the specified duration.
+		/// </summary>
+		/// <param name="target">The transform to rotate</param>
+		/// <param name="targetPosition">The position to look at</param>
+		/// <param name="duration">Duration of the rotation</param>
+		/// <param name="up">The vector that defines in which direction up is (default: Vector3.up)</param>
+		/// <returns>The tweener instance</returns>
+		public static ITweener RotateTowards(this Transform target, Vector3 targetPosition, float duration, Vector3? up = null)
 		{
+			Vector3 direction = (targetPosition - target.position).normalized;
+			if (direction == Vector3.zero) return null;
+			
+			Quaternion startRotation = target.rotation;
+			Quaternion endRotation = Quaternion.LookRotation(direction, up ?? Vector3.up);
+			
 			var tweener = TweenerSolver.Create();
 			tweener.Lerp(t =>
 			{
 				if (target == null) return;
-
-				// Create a parabolic arc using quadratic Bezier curve
-				float t2 = t * t;
-				Vector3 position = (1 - t) * (1 - t) * start +
-								 2 * (1 - t) * t * peak +
-								 t2 * end;
-
-				target.position = position;
+				target.rotation = Quaternion.RotateTowards(startRotation, endRotation, t);
 			}, duration);
+			
 			return tweener;
 		}
 
