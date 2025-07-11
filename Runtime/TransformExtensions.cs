@@ -471,6 +471,24 @@ namespace THEBADDEST.Tweening
 			return tweener;
 		}
 
+		public static ITweener Jump(this Transform target, Vector3 start, Vector3 peak, Vector3 end, float duration)
+		{
+			var tweener = TweenerSolver.Create();
+			tweener.Lerp(t =>
+			{
+				if (target == null) return;
+
+				// Create a parabolic arc using quadratic Bezier curve
+				float t2 = t * t;
+				Vector3 position = (1 - t) * (1 - t) * start +
+								   2 * (1 - t) * t * peak +
+								   t2 * end;
+
+				target.position = position;
+			}, duration);
+			
+			return tweener;
+		}
 		/// <summary>
 		/// Creates a jumping motion with specified height and distance.
 		/// </summary>
