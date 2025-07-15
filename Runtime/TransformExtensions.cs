@@ -1394,6 +1394,56 @@ namespace THEBADDEST.Tweening
 				return points[0];
 			}
 		}
+		 /// <summary>
+        /// Flashes the color of a Renderer, SpriteRenderer, or Image for a duration, then restores the original color.
+        /// </summary>
+        /// <param name="target">The transform whose color to flash</param>
+        /// <param name="flashColor">The color to flash to</param>
+        /// <param name="duration">How long the flash lasts</param>
+        /// <returns>The tweener instance</returns>
+        public static ITweener FlashColor(this Transform target, Color flashColor, float duration)
+        {
+            if (target == null) return null;
+            // Try to get a SpriteRenderer, Renderer, or Image
+            var spriteRenderer = target.GetComponent<SpriteRenderer>();
+            var renderer = target.GetComponent<Renderer>();
+            var image = target.GetComponent<Image>();
+            Color originalColor = Color.white;
+            Action<Color> setColor = null;
+            if (spriteRenderer != null)
+            {
+                originalColor = spriteRenderer.color;
+                setColor = c => spriteRenderer.color = c;
+            }
+            else if (renderer != null && renderer.material.HasProperty("_Color"))
+            {
+                originalColor = renderer.material.color;
+                setColor = c => renderer.material.color = c;
+            }
+            else if (image != null)
+            {
+                originalColor = image.color;
+                setColor = c => image.color = c;
+            }
+            else
+            {
+                // No colorable component found
+                return null;
+            }
+            var tweener = TweenerSolver.Create();
+            tweener.Lerp(t =>
+            {
+                if (target == null) return;
+                // Flash in and out: 0-0.5 lerp to flashColor, 0.5-1 lerp back to original
+                if (t < 0.5f)
+                    
+					(Color.Lerp(originalColor, flashColor, t * 2f));
+                else
+                    setColor(Color.Lerp(flashColor, originalColor, (t - 0.5f) * 2f));
+            }, duration);
+            tweener.OnComplete(() => setColor(originalColor));
+            return tweener;
+        }
 
 	}
 
