@@ -1436,8 +1436,7 @@ namespace THEBADDEST.Tweening
                 if (target == null) return;
                 // Flash in and out: 0-0.5 lerp to flashColor, 0.5-1 lerp back to original
                 if (t < 0.5f)
-                    
-					(Color.Lerp(originalColor, flashColor, t * 2f));
+					setColor(Color.Lerp(originalColor, flashColor, t * 2f));
                 else
                     setColor(Color.Lerp(flashColor, originalColor, (t - 0.5f) * 2f));
             }, duration);
