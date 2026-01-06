@@ -29,12 +29,7 @@ namespace THEBADDEST.Tweening
 			get => m_delay;
 			set => m_delay = value;
 		}
-		[Obsolete("This method is obsolete. Use WaitForCompletion instead.")]
-		public virtual IEnumerator Play(Transform target)
-		{
-			yield return tweener.WaitForCompletion();
-			onComplete?.Invoke();
-		}
+
 
 		public virtual IEnumerator WaitForCompletion()
 		{

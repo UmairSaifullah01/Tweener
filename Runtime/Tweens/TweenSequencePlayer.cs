@@ -14,9 +14,9 @@ namespace THEBADDEST.Tweening
 	public struct TweenTransform
 	{
 
-		public Tween     tween;
+		public Tween tween;
 		public Transform targetTransform;
-		public float     delay;
+		public float delay;
 
 	}
 
@@ -26,10 +26,10 @@ namespace THEBADDEST.Tweening
 		[SerializeField] bool autoPlay = false;
 
 		[SerializeField] TweenTransform[] tweens;
-		[SerializeField] UnityEvent       onComplete;
+		[SerializeField] UnityEvent onComplete;
 
 		Dictionary<int, List<TweenTransform>> tweenHierarchy;
-		List<ITweener>                        tweeners = new List<ITweener>();
+		List<ITweener> tweeners = new List<ITweener>();
 
 		void OnEnable()
 		{
@@ -48,7 +48,7 @@ namespace THEBADDEST.Tweening
 
 		void CreateHierarchy()
 		{
-			tweens         = tweens.OrderBy(x => x.tween.priority).ToArray();
+			tweens = tweens.OrderBy(x => x.tween.priority).ToArray();
 			tweenHierarchy = new Dictionary<int, List<TweenTransform>>();
 			int priority = 0;
 			foreach (var tt in tweens)
@@ -79,7 +79,6 @@ namespace THEBADDEST.Tweening
 		IEnumerator PlayCoroutine()
 		{
 			List<TweenTransform> sequence = new List<TweenTransform>();
-			
 			foreach (var pair in tweenHierarchy)
 			{
 				for (int i = 0; i < pair.Value.Count; i++)
@@ -93,7 +92,7 @@ namespace THEBADDEST.Tweening
 					{
 						if (tweenTransform.delay != 0)
 							tweenTransform.tween.delay = tweenTransform.delay;
-						StartCoroutine(tweenTransform.tween.Play(tweenTransform.targetTransform));
+						tweenTransform.tween.PlayWithTarget(tweenTransform.targetTransform);
 						tweeners.Add(tweenTransform.tween.tweener);
 					}
 				}
@@ -103,9 +102,9 @@ namespace THEBADDEST.Tweening
 			{
 				if (tweenTransform.delay != 0)
 					tweenTransform.tween.delay = tweenTransform.delay;
-				IEnumerator playCoroutine = tweenTransform.tween.Play(tweenTransform.targetTransform);
+				tweenTransform.tween.PlayWithTarget(tweenTransform.targetTransform);
 				tweeners.Add(tweenTransform.tween.tweener);
-				yield return playCoroutine;
+				yield return tweenTransform.tween.tweener.WaitForCompletion();
 			}
 
 			onComplete?.Invoke();

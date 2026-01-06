@@ -10,12 +10,6 @@ namespace THEBADDEST.Tweening
 	public class MoveTween : FromToTween
 	{
 
-		public override IEnumerator Play(Transform target)
-		{
-			PlayWithTarget(target);
-			yield return base.Play(target);
-		}
-
 		public override void PlayWithTarget(Transform target)
 		{
 			tweener=target.Move(from, to, duration);

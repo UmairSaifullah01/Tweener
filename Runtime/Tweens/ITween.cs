@@ -15,7 +15,7 @@ namespace THEBADDEST.Tweening
 		float delay { get; set; }
 
 		
-		IEnumerator Play(Transform target);
+		void PlayWithTarget(Transform target);
 
 	}
 

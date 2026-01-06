@@ -10,12 +10,6 @@ namespace THEBADDEST.Tweening
 	public class ScaleTween : FromToTween
 	{
 
-		public override IEnumerator Play(Transform target)
-		{
-			PlayWithTarget(target);
-			yield return base.Play(target);
-		}
-
 		public override void PlayWithTarget(Transform target)
 		{
 			tweener=target.Scale(from, to, duration);

@@ -13,11 +13,6 @@ namespace THEBADDEST.Tweening
 
 		[SerializeField] float alphaStartValue, alphaEndValue;
 		Image                  grapic;
-		public override IEnumerator Play(Transform target)
-		{
-			PlayWithTarget(target);
-			yield return base.Play(target);
-		}
 
 		public override void PlayWithTarget(Transform target)
 		{

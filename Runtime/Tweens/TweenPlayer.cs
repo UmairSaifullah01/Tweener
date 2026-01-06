@@ -10,9 +10,10 @@ namespace THEBADDEST.Tweening
 	public class TweenPlayer : MonoBehaviour
 	{
 
-		[SerializeField] bool  autoPlay = false;
+		[SerializeField] bool autoPlay = false;
 		[SerializeField] Tween tween;
-		ITweener               tweener;
+		ITweener tweener;
+
 		void OnEnable()
 		{
 			if (autoPlay)
@@ -23,23 +24,16 @@ namespace THEBADDEST.Tweening
 
 		void OnDisable()
 		{
-			if(tweener == null) return;
+			if (tweener == null) return;
 			TweenerSolver.StopTweener(tweener);
 		}
 
 		void Play()
 		{
-			StopAllCoroutines();
-			StartCoroutine(PlayCoroutine());
+			tween.PlayWithTarget(transform);
+			tweener = tween.tweener;
 		}
 
-		private IEnumerator PlayCoroutine()
-		{
-			var playCoroutine = tween.Play(transform);
-			tweener = tween.tweener;
-			yield return playCoroutine;
-		}
-		
 	}
 
 
