@@ -38,6 +38,12 @@ namespace THEBADDEST.Tweening
 		protected LerpDelegate lerpAction = null;
 		protected float duration = 0;
 		protected bool isPaused = false;
+		protected float elapsedTime = 0f;
+		protected float elapsedDelay = 0f;
+		protected bool delayComplete = false;
+		protected int currentLoop = 0;
+		protected bool startupDone = false;
+		protected UpdateType updateType = UpdateType.Normal;
 		#endregion
 
 		#region Properties
@@ -111,6 +117,18 @@ namespace THEBADDEST.Tweening
 
 			this.lerpAction = lerp ?? throw new System.ArgumentNullException(nameof(lerp));
 			this.duration = duration;
+			
+			// Reset state
+			elapsedTime = 0f;
+			elapsedDelay = 0f;
+			delayComplete = delay <= 0f;
+			currentLoop = 0;
+			startupDone = false;
+			isPlaying = true;
+			isPaused = false;
+
+			// Add to active list
+			TweenerSolver.AddActiveTweener(this, updateType);
 		}
 
 		public void Reverse()
@@ -119,14 +137,14 @@ namespace THEBADDEST.Tweening
 				throw new System.InvalidOperationException("Cannot reverse a tweener that hasn't been initialized with a lerp action");
 
 			isPlaying = false;
-			TweenerSolver.StopTweener(this);
+			TweenerSolver.MarkForKilling(this);
 			Lerp(t => lerpAction.Invoke(1 - t), duration);
 		}
 
 		public void Kill()
 		{
 			isPlaying = false;
-			TweenerSolver.StopTweener(this);
+			TweenerSolver.MarkForKilling(this);
 			onCompleteAllLoopsDelegate?.Invoke();
 		}
 
@@ -151,6 +169,12 @@ namespace THEBADDEST.Tweening
 			lerpAction = null;
 			duration = 0;
 			isPaused = false;
+			elapsedTime = 0f;
+			elapsedDelay = 0f;
+			delayComplete = false;
+			currentLoop = 0;
+			startupDone = false;
+			updateType = UpdateType.Normal;
 		}
 
 		public virtual void Pause()
@@ -185,7 +209,124 @@ namespace THEBADDEST.Tweening
 		protected void InvokeOnCompleteAllLoops()
 		{
 			onCompleteAllLoopsDelegate?.Invoke();
+		}
 
+		/// <summary>
+		/// Updates the tweener with the given delta time.
+		/// Returns true if the tweener should be killed (completed).
+		/// </summary>
+		public bool UpdateTween(float deltaTime, float unscaledDeltaTime)
+		{
+			if (!isPlaying || isPaused) return false;
+
+			float tDeltaTime = independentTime ? unscaledDeltaTime : deltaTime;
+			
+			// Handle delay
+			if (!delayComplete)
+			{
+				elapsedDelay += tDeltaTime;
+				if (elapsedDelay >= delay)
+				{
+					delayComplete = true;
+					tDeltaTime = elapsedDelay - delay;
+				}
+				else
+				{
+					return false; // Still in delay
+				}
+			}
+
+			// Startup
+			if (!startupDone)
+			{
+				startupDone = true;
+				elapsedTime = 0f;
+				currentLoop = 0;
+			}
+
+			// Update elapsed time
+			elapsedTime += tDeltaTime;
+			
+			// Check if we need to loop
+			while (elapsedTime >= duration && (loops == -1 || currentLoop < loops))
+			{
+				elapsedTime -= duration;
+				currentLoop++;
+				InvokeOnCompleteIteration();
+				
+				if (loops != -1 && currentLoop >= loops)
+				{
+					elapsedTime = duration;
+					break;
+				}
+			}
+
+			// Calculate intercept (0 to 1)
+			float intercept = duration > 0 ? elapsedTime / duration : 1f;
+			intercept = Mathf.Clamp01(intercept);
+
+			// Apply easing
+			var easeFunc = GetEaseFunction();
+			float easedIntercept = easeFunc.Invoke(0, 1, intercept);
+
+			// Apply loop type
+			switch (loopType)
+			{
+				case LoopType.Yoyo:
+					if (currentLoop % 2 == 1)
+						easedIntercept = 1f - easedIntercept;
+					break;
+				case LoopType.Incremental:
+					easedIntercept = intercept + currentLoop;
+					break;
+			}
+
+			// Apply lerp
+			lerpAction?.Invoke(easedIntercept);
+
+			// Check if complete
+			bool isComplete = (loops != -1 && currentLoop >= loops && elapsedTime >= duration);
+			if (isComplete)
+			{
+				isPlaying = false;
+				InvokeOnCompleteAllLoops();
+				return true; // Mark for killing
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Sets the position of the tweener (used by sequences).
+		/// </summary>
+		public void SetPosition(float normalizedPosition)
+		{
+			float intercept = Mathf.Clamp01(normalizedPosition);
+			var easeFunc = GetEaseFunction();
+			float easedIntercept = easeFunc.Invoke(0, 1, intercept);
+			
+			// Apply loop type if needed
+			switch (loopType)
+			{
+				case LoopType.Yoyo:
+					if (currentLoop % 2 == 1)
+						easedIntercept = 1f - easedIntercept;
+					break;
+				case LoopType.Incremental:
+					easedIntercept = intercept + currentLoop;
+					break;
+			}
+			
+			lerpAction?.Invoke(easedIntercept);
+		}
+
+		/// <summary>
+		/// Sets the update type for this tweener.
+		/// </summary>
+		public ITweener SetUpdateType(UpdateType updateType)
+		{
+			this.updateType = updateType;
+			return this;
 		}
 	}
 }

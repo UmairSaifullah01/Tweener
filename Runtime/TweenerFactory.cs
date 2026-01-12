@@ -12,12 +12,9 @@ namespace THEBADDEST.Tweening
 		ObjectPool<ITweener> pool;
 		List<ITweener>       tweeners;
 
-		public TweenerFactory(bool isCoroutineBased = true)
+		public TweenerFactory(bool isCoroutineBased = false)
 		{
-			if (isCoroutineBased)
-				pool = new ObjectPool<ITweener>(() => new CorotineTweener(), Get, Release, OnDestroy);
-			else
-				pool = new ObjectPool<ITweener>(() => new AsyncTweener(), Get, Release, OnDestroy);
+			pool = isCoroutineBased ? new ObjectPool<ITweener>(() => new CorotineTweener(), Get, Release, OnDestroy) : new ObjectPool<ITweener>(() => new FrameBasedTweener(), Get, Release, OnDestroy);
 			tweeners = new List<ITweener>();
 		}
 
