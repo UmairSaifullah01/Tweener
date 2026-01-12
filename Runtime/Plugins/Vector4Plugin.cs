@@ -52,7 +52,7 @@ namespace THEBADDEST.Tweening2.Plugins
         }
 
         public override void EvaluateAndApply(
-            VectorOptions options, Tween t, bool isRelative, DOGetter<Vector4> getter, DOSetter<Vector4> setter,
+            VectorOptions options, Tween t, bool isRelative, Getter<Vector4> getter, Setter<Vector4> setter,
             float elapsed, Vector4 startValue, Vector4 changeValue, float duration, bool usingInversePosition, int newCompletedSteps,
             UpdateNotice updateNotice
         )

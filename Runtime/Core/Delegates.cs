@@ -20,10 +20,10 @@ namespace THEBADDEST.Tweening2.Core
     /// <summary>
     /// Used in place of System.Func, which is not available in mscorlib.
     /// </summary>
-    public delegate T DOGetter<out T>();
+    public delegate T Getter<out T>();
 
     /// <summary>
     /// Used in place of System.Action.
     /// </summary>
-    public delegate void DOSetter<in T>(T pNewValue);
+    public delegate void Setter<in T>(T pNewValue);
 }

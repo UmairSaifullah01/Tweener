@@ -14,8 +14,8 @@ namespace THEBADDEST.Tweening2.Core
 
         public T2 startValue, endValue, changeValue;
         public TPlugOptions plugOptions;
-        public DOGetter<T1> getter;
-        public DOSetter<T1> setter;
+        public Getter<T1> getter;
+        public Setter<T1> setter;
         internal ABSTweenPlugin<T1, T2, TPlugOptions> tweenPlugin;
 
         const string _TxtCantChangeSequencedValues = "You cannot change the values of a tween contained inside a Sequence";

@@ -14,6 +14,6 @@ namespace THEBADDEST.Tweening2.Plugins.Core
         public abstract void SetChangeValue(TweenerCore<T1, T2, TPlugOptions> t);
         public abstract float GetSpeedBasedDuration(TPlugOptions options, float unitsXSecond, T2 changeValue);
         // usingInversePosition is used by PathPlugin to calculate correctly the current waypoint reached
-        public abstract void EvaluateAndApply(TPlugOptions options, Tween t, bool isRelative, DOGetter<T1> getter, DOSetter<T1> setter, float elapsed, T2 startValue, T2 changeValue, float duration, bool usingInversePosition, int newCompletedSteps, UpdateNotice updateNotice);
+        public abstract void EvaluateAndApply(TPlugOptions options, Tween t, bool isRelative, Getter<T1> getter, Setter<T1> setter, float elapsed, T2 startValue, T2 changeValue, float duration, bool usingInversePosition, int newCompletedSteps, UpdateNotice updateNotice);
     }
 }

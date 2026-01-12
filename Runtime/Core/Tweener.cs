@@ -42,7 +42,7 @@ namespace THEBADDEST.Tweening2.Core
         // CALLED BY Tween static API when spawning/creating a new Tweener.
         // Returns TRUE if the setup is successful
         internal static bool Setup<T1, T2, TPlugOptions>(
-            TweenerCore<T1, T2, TPlugOptions> t, DOGetter<T1> getter, DOSetter<T1> setter, T2 endValue, float duration, ABSTweenPlugin<T1, T2, TPlugOptions> plugin = null
+            TweenerCore<T1, T2, TPlugOptions> t, Getter<T1> getter, Setter<T1> setter, T2 endValue, float duration, ABSTweenPlugin<T1, T2, TPlugOptions> plugin = null
         )
             where TPlugOptions : struct, IPlugOptions
         {

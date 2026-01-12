@@ -9,7 +9,6 @@ namespace THEBADDEST.Tweening2
     /// <summary>
     /// Virtual tweening utilities for non-transform animations
     /// </summary>
-    [Icon("Assets/Tweener/Editor/tweenIcon.png")]
     public static class VirtualTween
     {
         /// <summary>

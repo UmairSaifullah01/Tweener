@@ -1,4 +1,4 @@
-namespace THEBADDEST.Tweening2.Core
+namespace THEBADDEST.Tweening2
 {
     /// <summary>
     /// Types of loop

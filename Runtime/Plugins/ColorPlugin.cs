@@ -51,7 +51,7 @@ namespace THEBADDEST.Tweening2.Plugins
         }
 
         public override void EvaluateAndApply(
-            ColorOptions options, Tween t, bool isRelative, DOGetter<Color> getter, DOSetter<Color> setter,
+            ColorOptions options, Tween t, bool isRelative, Getter<Color> getter, Setter<Color> setter,
             float elapsed, Color startValue, Color changeValue, float duration, bool usingInversePosition, int newCompletedSteps,
             UpdateNotice updateNotice
         )

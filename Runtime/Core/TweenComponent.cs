@@ -7,7 +7,6 @@ namespace THEBADDEST.Tweening2.Core
     /// Used to separate Tween class from the MonoBehaviour instance.
     /// Contains all instance-based methods
     /// </summary>
-    [AddComponentMenu("")]
     public class TweenComponent : MonoBehaviour
     {
         /// <summary>Used internally inside Unity Editor</summary>

@@ -1,7 +1,6 @@
 using UnityEngine;
 using THEBADDEST.Tweening2.Core;
 using THEBADDEST.Tweening2.Plugins.Options;
-using THEBADDEST.Tweening2.Bridge;
 
 namespace THEBADDEST.Tweening2
 {
@@ -42,7 +41,7 @@ namespace THEBADDEST.Tweening2
         public static float defaultEasePeriod = 0f;
 
         /// <summary>Used internally. Assigned/removed by TweenComponent</summary>
-        public static TweenComponent instance;
+        private static TweenComponent instance;
 
         internal static bool initialized;
 
@@ -108,7 +107,7 @@ namespace THEBADDEST.Tweening2
 
         /// <summary>Tweens a property or field to the given value using default plugins</summary>
         public static TweenerCore<T1, T2, TPlugOptions> To<T1, T2, TPlugOptions>(
-            Core.DOGetter<T1> getter, Core.DOSetter<T1> setter, T2 endValue, float duration)
+            Core.Getter<T1> getter, Core.Setter<T1> setter, T2 endValue, float duration)
             where TPlugOptions : struct, IPlugOptions
         {
             InitCheck();
@@ -130,25 +129,25 @@ namespace THEBADDEST.Tweening2
         }
 
         /// <summary>Tweens a float property or field to the given value</summary>
-        public static TweenerCore<float, float, FloatOptions> To(Core.DOGetter<float> getter, Core.DOSetter<float> setter, float endValue, float duration)
+        public static TweenerCore<float, float, FloatOptions> To(Core.Getter<float> getter, Core.Setter<float> setter, float endValue, float duration)
         {
             return To<float, float, FloatOptions>(getter, setter, endValue, duration);
         }
 
         /// <summary>Tweens a Vector3 property or field to the given value</summary>
-        public static TweenerCore<Vector3, Vector3, VectorOptions> To(Core.DOGetter<Vector3> getter, Core.DOSetter<Vector3> setter, Vector3 endValue, float duration)
+        public static TweenerCore<Vector3, Vector3, VectorOptions> To(Core.Getter<Vector3> getter, Core.Setter<Vector3> setter, Vector3 endValue, float duration)
         {
             return To<Vector3, Vector3, VectorOptions>(getter, setter, endValue, duration);
         }
 
         /// <summary>Tweens a Vector2 property or field to the given value</summary>
-        public static TweenerCore<Vector2, Vector2, VectorOptions> To(Core.DOGetter<Vector2> getter, Core.DOSetter<Vector2> setter, Vector2 endValue, float duration)
+        public static TweenerCore<Vector2, Vector2, VectorOptions> To(Core.Getter<Vector2> getter, Core.Setter<Vector2> setter, Vector2 endValue, float duration)
         {
             return To<Vector2, Vector2, VectorOptions>(getter, setter, endValue, duration);
         }
 
         /// <summary>Tweens a Color property or field to the given value</summary>
-        public static TweenerCore<Color, Color, ColorOptions> To(Core.DOGetter<Color> getter, Core.DOSetter<Color> setter, Color endValue, float duration)
+        public static TweenerCore<Color, Color, ColorOptions> To(Core.Getter<Color> getter, Core.Setter<Color> setter, Color endValue, float duration)
         {
             return To<Color, Color, ColorOptions>(getter, setter, endValue, duration);
         }
