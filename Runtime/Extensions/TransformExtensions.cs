@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
-using THEBADDEST.Tweening2;
 using THEBADDEST.Tweening2.Core;
 using THEBADDEST.Tweening2.Plugins.Options;
 
@@ -11,6 +10,7 @@ namespace THEBADDEST.Tweening2
     /// <summary>
     /// Methods that extend Transform and allow to directly create and control tweens
     /// </summary>
+    [Icon("Assets/Tweener/Editor/tweenIcon.png")]
     public static class TransformExtensions
     {
         /// <summary>Tweens a Transform's position to the given value.
