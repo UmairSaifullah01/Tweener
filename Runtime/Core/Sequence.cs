@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using THEBADDEST.Tweening2.Core.Easing;
 
 namespace THEBADDEST.Tweening2.Core
@@ -163,8 +164,35 @@ namespace THEBADDEST.Tweening2.Core
 
         internal static bool Startup(Sequence s)
         {
+            if (s._sequencedObjs.Count == 0 && s.sequencedTweens.Count == 0 && !IsAnyCallbackSet(s))
+                return false;
+
             s.startupDone = true;
+            s.fullDuration = s.loops > -1 ? s.duration * s.loops : float.PositiveInfinity;
+            StableSortSequencedObjs(s._sequencedObjs);
             return true;
+        }
+
+        static bool IsAnyCallbackSet(Sequence s)
+        {
+            return s.onComplete != null || s.onKill != null || s.onPause != null || s.onPlay != null
+                || s.onRewind != null || s.onStart != null || s.onStepComplete != null || s.onUpdate != null;
+        }
+
+        static void StableSortSequencedObjs(List<ABSSequentiable> list)
+        {
+            int len = list.Count;
+            for (int i = 1; i < len; i++)
+            {
+                int j = i;
+                ABSSequentiable temp = list[i];
+                while (j > 0 && list[j - 1].sequencedPosition > temp.sequencedPosition)
+                {
+                    list[j] = list[j - 1];
+                    j = j - 1;
+                }
+                list[j] = temp;
+            }
         }
 
         // Applies the tween set by DoGoto.
@@ -183,47 +211,113 @@ namespace THEBADDEST.Tweening2.Core
                 newPos = s.duration * EaseManager.Evaluate(s.easeType, s.customEase, newPos, s.duration, s.easeOvershootOrAmplitude, s.easePeriod);
             }
 
-            // Update sequenced objects
+            bool isBackwardsUpdate = newPos < prevPosition;
+
+            if (isBackwardsUpdate)
+                ApplyInternalCycleBackwards(s, prevPosition, newPos, updateMode);
+            else
+                ApplyInternalCycleForward(s, prevPosition, newPos, updateMode);
+
+            return false;
+        }
+
+        static void ApplyInternalCycleForward(Sequence s, float fromPos, float toPos, UpdateMode updateMode)
+        {
             int len = s._sequencedObjs.Count;
             for (int i = 0; i < len; ++i)
             {
-                if (!s.active) return true;
+                // Nested sequences have active=false (removed from active list) but are driven by parent - must still run
+                if (!s.active && !s.isSequenced) return;
                 ABSSequentiable sequentiable = s._sequencedObjs[i];
-                if (sequentiable.sequencedPosition > newPos || sequentiable.sequencedEndPosition < prevPosition) continue;
+                if (sequentiable.sequencedPosition > toPos || sequentiable.sequencedEndPosition < fromPos) continue;
 
                 if (sequentiable.tweenType == TweenType.Callback)
                 {
-                    if (updateMode == UpdateMode.Update && prevPosition < sequentiable.sequencedPosition && newPos >= sequentiable.sequencedPosition)
-                    {
+                    if (updateMode == UpdateMode.Update && fromPos < sequentiable.sequencedPosition && toPos >= sequentiable.sequencedPosition)
                         Tween.OnTweenCallback(sequentiable.onStart, s);
-                    }
                 }
                 else
                 {
-                    // Nested Tweener/Sequence
                     Tween t = (Tween)sequentiable;
-                    float gotoPos = newPos - sequentiable.sequencedPosition;
-                    if (gotoPos < 0) gotoPos = 0;
-                    if (gotoPos > t.duration) gotoPos = t.duration;
-                    
-                    if (!t.startupDone)
+                    if (!t.startupDone && !t.Startup()) continue;
+
+                    float localTime = toPos - sequentiable.sequencedPosition;
+                    if (localTime < 0) localTime = 0;
+                    int toCompletedLoops;
+                    float toPosition;
+                    if (t.duration <= 0)
                     {
-                        if (!t.Startup()) continue;
+                        toCompletedLoops = 0;
+                        toPosition = 0;
                     }
-                    
-                    t.position = gotoPos;
-                    if (Tween.Goto(t, gotoPos, 0, updateMode))
+                    else
                     {
-                        // Nested tween failed
+                        toCompletedLoops = t.loops == -1 ? (int)(localTime / t.duration) : Mathf.Min((int)(localTime / t.duration), t.loops);
+                        toPosition = localTime - toCompletedLoops * t.duration;
+                        if (t.loops != -1 && toCompletedLoops >= t.loops)
+                        {
+                            toCompletedLoops = t.loops;
+                            toPosition = t.duration;
+                        }
+                    }
+                    t.isBackwards = false;
+                    if (Tween.Goto(t, toPosition, toCompletedLoops, updateMode))
+                    {
                         s._sequencedObjs.RemoveAt(i);
                         s.sequencedTweens.Remove(t);
                         --i; --len;
-                        continue;
                     }
                 }
             }
+        }
 
-            return false;
+        static void ApplyInternalCycleBackwards(Sequence s, float fromPos, float toPos, UpdateMode updateMode)
+        {
+            int len = s._sequencedObjs.Count;
+            for (int i = len - 1; i >= 0; --i)
+            {
+                // Nested sequences have active=false (removed from active list) but are driven by parent - must still run
+                if (!s.active && !s.isSequenced) return;
+                ABSSequentiable sequentiable = s._sequencedObjs[i];
+                if (sequentiable.sequencedEndPosition < toPos || sequentiable.sequencedPosition > fromPos) continue;
+
+                if (sequentiable.tweenType == TweenType.Callback)
+                {
+                    if (updateMode == UpdateMode.Update && fromPos >= sequentiable.sequencedPosition && toPos < sequentiable.sequencedPosition)
+                        Tween.OnTweenCallback(sequentiable.onStart, s);
+                }
+                else
+                {
+                    Tween t = (Tween)sequentiable;
+                    if (!t.startupDone) continue;
+
+                    float localTime = toPos - sequentiable.sequencedPosition;
+                    if (localTime < 0) localTime = 0;
+                    int toCompletedLoops;
+                    float toPosition;
+                    if (t.duration <= 0)
+                    {
+                        toCompletedLoops = 0;
+                        toPosition = 0;
+                    }
+                    else
+                    {
+                        toCompletedLoops = t.loops == -1 ? (int)(localTime / t.duration) : Mathf.Min((int)(localTime / t.duration), t.loops);
+                        toPosition = localTime - toCompletedLoops * t.duration;
+                        if (t.loops != -1 && toCompletedLoops >= t.loops)
+                        {
+                            toCompletedLoops = t.loops;
+                            toPosition = t.duration;
+                        }
+                    }
+                    t.isBackwards = true;
+                    if (Tween.Goto(t, toPosition, toCompletedLoops, updateMode))
+                    {
+                        s._sequencedObjs.RemoveAt(i);
+                        s.sequencedTweens.Remove(t);
+                    }
+                }
+            }
         }
     }
 

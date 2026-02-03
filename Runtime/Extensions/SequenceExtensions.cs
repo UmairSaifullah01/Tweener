@@ -1,4 +1,3 @@
-using THEBADDEST.Tweening2;
 using THEBADDEST.Tweening2.Core;
 
 namespace THEBADDEST.Tweening2
@@ -21,6 +20,14 @@ namespace THEBADDEST.Tweening2
         {
             if (sequence == null || tween == null) return sequence;
             Sequence.Insert(sequence, tween, sequence.lastTweenInsertTime);
+            return sequence;
+        }
+
+        /// <summary>Inserts the given tween at the specified time position in the sequence</summary>
+        public static Sequence Insert(this Sequence sequence, Tween tween, float atPosition)
+        {
+            if (sequence == null || tween == null) return sequence;
+            Sequence.Insert(sequence, tween, atPosition);
             return sequence;
         }
 
@@ -207,9 +214,7 @@ namespace THEBADDEST.Tweening2
             {
                 sequence.Complete(true);
             }
-            // Mark sequence for despawning - TweenManager will handle it
-            sequence.active = false;
-            sequence.isPlaying = false;
+            TweenManager.MarkForKilling(sequence);
         }
 
         /// <summary>Waits for the sequence to complete (coroutine-friendly)</summary>
