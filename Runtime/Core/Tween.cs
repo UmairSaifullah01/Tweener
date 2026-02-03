@@ -1,12 +1,15 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using THEBADDEST.Tweening2;
+using THEBADDEST.Tweening2.Plugins.Options;
 
 namespace THEBADDEST.Tweening2.Core
 {
     /// <summary>
     /// Indicates either a Tweener or a Sequence
     /// </summary>
-    public abstract class Tween : ABSSequentiable
+    public abstract class Tween : ABSSequentiable, ITweener
     {
         // OPTIONS ///////////////////////////////////////////////////
 
@@ -339,6 +342,135 @@ namespace THEBADDEST.Tweening2.Core
             }
             if (andPlay) isPlaying = true;
             Goto(this, position, completedLoops, UpdateMode.Goto);
+        }
+
+        #endregion
+
+        #region ITweener
+
+        Tween ITweener.Tween => this;
+
+        float ITweener.Duration => duration;
+
+        private CallbackDelegate _onCompleteAllLoops;
+        private CallbackDelegate _onCompleteIteration;
+        private bool _itweenerCompletionWired;
+
+        private void EnsureITweenerCompletionWired()
+        {
+            if (_itweenerCompletionWired) return;
+            _itweenerCompletionWired = true;
+            onComplete += () => _onCompleteAllLoops?.Invoke();
+            onStepComplete += () => _onCompleteIteration?.Invoke();
+        }
+
+        public event CallbackDelegate OnCompleteAllLoops
+        {
+            add { _onCompleteAllLoops += value; EnsureITweenerCompletionWired(); }
+            remove { _onCompleteAllLoops -= value; }
+        }
+
+        public event CallbackDelegate OnCompleteIteration
+        {
+            add { _onCompleteIteration += value; EnsureITweenerCompletionWired(); }
+            remove { _onCompleteIteration -= value; }
+        }
+
+        public ITweener SetEase(EaseType ease)
+        {
+            easeType = ease;
+            return this;
+        }
+
+        public ITweener SetEase(AnimationCurve easeCurve)
+        {
+            easeType = EaseType.INTERNAL_Custom;
+            customEase = (time, dur, overshootOrAmplitude, period) => easeCurve.Evaluate(time / dur);
+            return this;
+        }
+
+        public ITweener SetLoops(int loops, LoopType loopType)
+        {
+            this.loops = loops;
+            this.loopType = loopType;
+            return this;
+        }
+
+        public ITweener SetDelay(float seconds)
+        {
+            delay = seconds;
+            return this;
+        }
+
+        public ITweener SetTime(bool independent = false)
+        {
+            isIndependentUpdate = independent;
+            TweenManager.SetUpdateType(this, updateType, independent);
+            return this;
+        }
+
+        public void Lerp(LerpDelegate lerp, float duration)
+        {
+            if (lerp == null) return;
+            var floatCore = TweenManager.GetTweener<float, float, FloatOptions>();
+            float startValue = 0f;
+            float endValue = 1f;
+            floatCore.getter = () => startValue;
+            floatCore.setter = (value) => lerp(value);
+            floatCore.endValue = endValue;
+            floatCore.duration = duration;
+            if (!Tweener.Setup(floatCore, floatCore.getter, floatCore.setter, endValue, duration))
+            {
+                TweenLog.LogError("Failed to setup lerp tween");
+                TweenManager.Despawn(floatCore);
+                return;
+            }
+            floatCore.onComplete += () => _onCompleteAllLoops?.Invoke();
+            floatCore.onStepComplete += () => _onCompleteIteration?.Invoke();
+            TweenManager.AddActiveTween(floatCore);
+        }
+
+        public void Reverse()
+        {
+            isBackwards = !isBackwards;
+        }
+
+        void ITweener.Kill()
+        {
+            TweenManager.MarkForKilling(this);
+            _onCompleteAllLoops?.Invoke();
+        }
+
+        void ITweener.Pause()
+        {
+            TweenManager.Pause(this);
+        }
+
+        void ITweener.Resume()
+        {
+            TweenManager.Play(this);
+        }
+
+        void ITweener.Reset()
+        {
+            Reset();
+            _onCompleteAllLoops = null;
+            _onCompleteIteration = null;
+        }
+
+        public IEnumerator WaitForCompletion()
+        {
+            while (active && isPlaying && !isComplete)
+                yield return null;
+        }
+
+        public ITweener OnComplete(CallbackDelegate onComplete, bool singleIteration = false)
+        {
+            if (singleIteration)
+                OnCompleteIteration += onComplete;
+            else
+                OnCompleteAllLoops += onComplete;
+            return this;
         }
 
         #endregion

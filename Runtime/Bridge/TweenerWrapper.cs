@@ -14,6 +14,8 @@ namespace THEBADDEST.Tweening2.Bridge
         private CoreTween _core;
         private LerpDelegate _lerpDelegate;
 
+        public CoreTween Tween => _core;
+
         public event CallbackDelegate OnCompleteAllLoops;
         public event CallbackDelegate OnCompleteIteration;
 

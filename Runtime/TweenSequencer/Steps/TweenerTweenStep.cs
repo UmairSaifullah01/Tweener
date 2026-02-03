@@ -39,7 +39,7 @@ namespace THEBADDEST.Tweening2
             if (actions == null || actions.Length == 0)
                 return;
 
-            Sequence sequence = TweenCore.Sequence();
+            Sequence sequence = (Sequence)TweenCore.Sequence();
 
             for (int i = 0; i < actions.Length; i++)
             {

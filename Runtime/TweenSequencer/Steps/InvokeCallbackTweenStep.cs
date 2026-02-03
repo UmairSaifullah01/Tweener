@@ -21,7 +21,7 @@ namespace THEBADDEST.Tweening2
 
         public override void AddTweenToSequence(Sequence animationSequence)
         {
-            Sequence sequence = TweenCore.Sequence();
+            Sequence sequence = (Sequence)TweenCore.Sequence();
             // Pause the nested sequence - it will be controlled by the parent sequence
             sequence.isPlaying = false;
             sequence.SetDelay(Delay);

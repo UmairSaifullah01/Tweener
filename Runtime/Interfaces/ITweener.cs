@@ -9,6 +9,9 @@ namespace THEBADDEST.Tweening2
 
     public interface ITweener
     {
+        /// <summary>Underlying Tween for use in sequences and engine.</summary>
+        Tween Tween { get; }
+
         event CallbackDelegate OnCompleteAllLoops;
         event CallbackDelegate OnCompleteIteration;
         

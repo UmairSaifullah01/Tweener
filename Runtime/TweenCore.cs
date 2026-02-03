@@ -161,7 +161,7 @@ namespace THEBADDEST.Tweening2
         }
 
         /// <summary>Creates a new Sequence</summary>
-        public static Sequence Sequence()
+        public static ISequence Sequence()
         {
             InitCheck();
             Sequence s = TweenManager.GetSequence();

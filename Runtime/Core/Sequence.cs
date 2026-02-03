@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using THEBADDEST.Tweening2;
 using THEBADDEST.Tweening2.Core.Easing;
 
 namespace THEBADDEST.Tweening2.Core
@@ -7,7 +8,7 @@ namespace THEBADDEST.Tweening2.Core
     /// <summary>
     /// Controls other tweens as a group
     /// </summary>
-    public sealed class Sequence : Tween
+    public sealed class Sequence : Tween, ISequence
     {
         // SETUP DATA ////////////////////////////////////////////////
 
@@ -319,6 +320,180 @@ namespace THEBADDEST.Tweening2.Core
                 }
             }
         }
+
+        #region ISequence
+
+        public ISequence Append(ITweener tweener)
+        {
+            if (tweener == null) return this;
+            Sequence.Insert(this, tweener.Tween, duration);
+            return this;
+        }
+
+        public ISequence Join(ITweener tweener)
+        {
+            if (tweener == null) return this;
+            Sequence.Insert(this, tweener.Tween, lastTweenInsertTime);
+            return this;
+        }
+
+        public ISequence Insert(ITweener tweener, float atPosition)
+        {
+            if (tweener == null) return this;
+            Sequence.Insert(this, tweener.Tween, atPosition);
+            return this;
+        }
+
+        public ISequence AppendInterval(float interval)
+        {
+            Sequence.AppendInterval(this, interval);
+            return this;
+        }
+
+        public ISequence AppendCallback(TweenCallback callback)
+        {
+            if (callback == null) return this;
+            Sequence.InsertCallback(this, callback, duration);
+            return this;
+        }
+
+        public ISequence SetDelay(float delay)
+        {
+            this.delay = delay;
+            return this;
+        }
+
+        public ISequence SetLoops(int loops, LoopType loopType = LoopType.Restart)
+        {
+            this.loops = loops;
+            this.loopType = loopType;
+            return this;
+        }
+
+        public ISequence SetUpdate(UpdateType updateType, bool isIndependentUpdate = false)
+        {
+            TweenManager.SetUpdateType(this, updateType, isIndependentUpdate);
+            return this;
+        }
+
+        public ISequence SetTarget(object target)
+        {
+            this.target = target;
+            return this;
+        }
+
+        public ISequence SetAutoKill(bool autoKill)
+        {
+            this.autoKill = autoKill;
+            return this;
+        }
+
+        public ISequence SetTimeScale(float timeScale)
+        {
+            this.timeScale = timeScale;
+            return this;
+        }
+
+        public ISequence Goto(float toPosition, bool andPlay = false)
+        {
+            TweenManager.Goto(this, toPosition, andPlay);
+            return this;
+        }
+
+        public ISequence Play()
+        {
+            TweenManager.Play(this);
+            return this;
+        }
+
+        public ISequence PlayForward()
+        {
+            isBackwards = false;
+            TweenManager.Play(this);
+            return this;
+        }
+
+        public ISequence PlayBackwards()
+        {
+            isBackwards = true;
+            TweenManager.Play(this);
+            return this;
+        }
+
+        public ISequence Pause()
+        {
+            TweenManager.Pause(this);
+            return this;
+        }
+
+        public ISequence TogglePause()
+        {
+            if (isPlaying)
+                TweenManager.Pause(this);
+            else
+                TweenManager.Play(this);
+            return this;
+        }
+
+        public ISequence Rewind(bool includeDelay = true)
+        {
+            Goto(0, false);
+            if (includeDelay)
+            {
+                elapsedDelay = 0;
+                delayComplete = false;
+            }
+            return this;
+        }
+
+        public ISequence Complete(bool withCallbacks = true)
+        {
+            Goto(duration, false);
+            if (withCallbacks && onComplete != null)
+                Tween.OnTweenCallback(onComplete, this);
+            return this;
+        }
+
+        public void Kill(bool complete = false)
+        {
+            if (complete)
+                Complete(true);
+            TweenManager.MarkForKilling(this);
+        }
+
+        public float Duration()
+        {
+            return duration;
+        }
+
+        public float ElapsedPercentage()
+        {
+            if (duration <= 0) return 0f;
+            return position / duration;
+        }
+
+        public bool IsActive()
+        {
+            return active;
+        }
+
+        public bool IsPlaying()
+        {
+            return isPlaying;
+        }
+
+        public bool IsBackwards()
+        {
+            return isBackwards;
+        }
+
+        public System.Collections.IEnumerator WaitForCompletion()
+        {
+            while (active && isPlaying && !isComplete)
+                yield return null;
+        }
+
+        #endregion
     }
 
     // Internal class for Sequence callbacks

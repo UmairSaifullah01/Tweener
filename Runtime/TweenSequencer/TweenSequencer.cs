@@ -71,7 +71,7 @@ namespace THEBADDEST.Tweening2
         public UnityEvent OnProgressEvent => onProgressEvent;
 
         private Sequence playingSequence;
-        public Sequence PlayingSequence => playingSequence;
+        public ISequence PlayingSequence => playingSequence;
         private PlayType playTypeInternal = PlayType.Forward;
 #if UNITY_EDITOR
         private bool requiresReset = false;
@@ -146,7 +146,7 @@ namespace THEBADDEST.Tweening2
             if (onCompleteCallback != null)
                 onFinishedEvent.AddListener(onCompleteCallback.Invoke);
 
-            playingSequence = GenerateSequence();
+            playingSequence = (Sequence)GenerateSequence();
             if (playingSequence == null)
                 return;
 
@@ -288,11 +288,11 @@ namespace THEBADDEST.Tweening2
                 yield return playingSequence.WaitForCompletion();
         }
 
-        public virtual Sequence GenerateSequence()
+        public virtual ISequence GenerateSequence()
         {
             if (!Application.isPlaying)
                 return null;
-            Sequence sequence = TweenCore.Sequence();
+            Sequence sequence = (Sequence)TweenCore.Sequence();
 
             // Various edge cases exists with OnStart() and OnComplete(), some of which can be solved with OnRewind(),
             // but it still leaves callbacks unfired when reversing direction after natural completion of the animation.
