@@ -168,7 +168,7 @@ namespace THEBADDEST.Tweening2.Core
 
         // Instead of advancing the tween from the previous position each time,
         // uses the given position to calculate running time since startup, and places the tween there like a Goto.
-        internal static bool DoGoto(Tween t, float toPosition, int toCompletedLoops, UpdateMode updateMode)
+        internal static bool Goto(Tween t, float toPosition, int toCompletedLoops, UpdateMode updateMode)
         {
             // Startup
             if (!t.startupDone)
@@ -338,7 +338,7 @@ namespace THEBADDEST.Tweening2.Core
                 }
             }
             if (andPlay) isPlaying = true;
-            DoGoto(this, position, completedLoops, UpdateMode.Goto);
+            Goto(this, position, completedLoops, UpdateMode.Goto);
         }
 
         #endregion

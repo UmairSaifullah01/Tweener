@@ -26,7 +26,7 @@ namespace THEBADDEST.Tweening2.Core
 
         #region Creation Methods
 
-        internal static Sequence DoPrepend(Sequence inSequence, Tween t)
+        internal static Sequence Prepend(Sequence inSequence, Tween t)
         {
             if (t.loops == -1)
             {
@@ -43,10 +43,10 @@ namespace THEBADDEST.Tweening2.Core
                 sequentiable.sequencedEndPosition += tFullTime;
             }
 
-            return DoInsert(inSequence, t, 0);
+            return Insert(inSequence, t, 0);
         }
 
-        internal static Sequence DoInsert(Sequence inSequence, Tween t, float atPosition)
+        internal static Sequence Insert(Sequence inSequence, Tween t, float atPosition)
         {
             TweenManager.AddActiveTweenToSequence(t);
 
@@ -80,14 +80,14 @@ namespace THEBADDEST.Tweening2.Core
             return inSequence;
         }
 
-        internal static Sequence DoAppendInterval(Sequence inSequence, float interval)
+        internal static Sequence AppendInterval(Sequence inSequence, float interval)
         {
             inSequence.lastTweenInsertTime = inSequence.duration;
             inSequence.duration += interval;
             return inSequence;
         }
 
-        internal static Sequence DoPrependInterval(Sequence inSequence, float interval)
+        internal static Sequence PrependInterval(Sequence inSequence, float interval)
         {
             inSequence.lastTweenInsertTime = 0;
             inSequence.duration += interval;
@@ -102,7 +102,7 @@ namespace THEBADDEST.Tweening2.Core
             return inSequence;
         }
 
-        internal static Sequence DoInsertCallback(Sequence inSequence, TweenCallback callback, float atPosition)
+        internal static Sequence InsertCallback(Sequence inSequence, TweenCallback callback, float atPosition)
         {
             inSequence.lastTweenInsertTime = atPosition;
             SequenceCallback c = new SequenceCallback(atPosition, callback);
@@ -158,10 +158,10 @@ namespace THEBADDEST.Tweening2.Core
         // Returns TRUE in case of success, FALSE if there are missing references and the tween needs to be killed
         internal override bool Startup()
         {
-            return DoStartup(this);
+            return Startup(this);
         }
 
-        internal static bool DoStartup(Sequence s)
+        internal static bool Startup(Sequence s)
         {
             s.startupDone = true;
             return true;
@@ -171,11 +171,11 @@ namespace THEBADDEST.Tweening2.Core
         // Returns TRUE if the tween needs to be killed
         internal override bool ApplyTween(float prevPosition, int prevCompletedLoops, int newCompletedSteps, bool useInversePosition, UpdateMode updateMode, UpdateNotice updateNotice)
         {
-            return DoApplyTween(this, prevPosition, prevCompletedLoops, newCompletedSteps, useInversePosition, updateMode);
+            return ApplyTween(this, prevPosition, prevCompletedLoops, newCompletedSteps, useInversePosition, updateMode);
         }
 
         // Simplified version of ApplyTween for Sequence
-        internal static bool DoApplyTween(Sequence s, float prevPosition, int prevCompletedLoops, int newCompletedSteps, bool useInversePosition, UpdateMode updateMode)
+        internal static bool ApplyTween(Sequence s, float prevPosition, int prevCompletedLoops, int newCompletedSteps, bool useInversePosition, UpdateMode updateMode)
         {
             float newPos = s.position;
             if (s.easeType != EaseType.Linear)
@@ -212,7 +212,7 @@ namespace THEBADDEST.Tweening2.Core
                     }
                     
                     t.position = gotoPos;
-                    if (Tween.DoGoto(t, gotoPos, 0, updateMode))
+                    if (Tween.Goto(t, gotoPos, 0, updateMode))
                     {
                         // Nested tween failed
                         s._sequencedObjs.RemoveAt(i);

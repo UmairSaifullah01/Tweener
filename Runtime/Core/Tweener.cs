@@ -162,7 +162,7 @@ namespace THEBADDEST.Tweening2.Core
             }
 
             // Force rewind
-            Tween.DoGoto(t, 0, 0, UpdateMode.IgnoreOnUpdate);
+            Tween.Goto(t, 0, 0, UpdateMode.IgnoreOnUpdate);
 
             return t;
         }
@@ -206,7 +206,7 @@ namespace THEBADDEST.Tweening2.Core
             }
 
             // Force rewind
-            Tween.DoGoto(t, 0, 0, UpdateMode.IgnoreOnUpdate);
+            Tween.Goto(t, 0, 0, UpdateMode.IgnoreOnUpdate);
 
             return t;
         }
@@ -237,7 +237,7 @@ namespace THEBADDEST.Tweening2.Core
             }
 
             // Force rewind
-            Tween.DoGoto(t, 0, 0, UpdateMode.IgnoreOnUpdate);
+            Tween.Goto(t, 0, 0, UpdateMode.IgnoreOnUpdate);
 
             return t;
         }

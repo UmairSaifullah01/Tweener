@@ -537,7 +537,7 @@ namespace THEBADDEST.Tweening2.Core
                 if (t.loops != -1 && toCompletedLoops >= t.loops) toPosition = t.duration;
             }
             // Goto
-            bool needsKilling = Tween.DoGoto(t, toPosition, toCompletedLoops, UpdateMode.Update);
+            bool needsKilling = Tween.Goto(t, toPosition, toCompletedLoops, UpdateMode.Update);
             if (needsKilling)
             {
                 MarkForKilling(t, isSingleTweenManualUpdate);
@@ -559,7 +559,7 @@ namespace THEBADDEST.Tweening2.Core
                 toCompletedLoops = t.loops;
                 toPosition = t.duration;
             }
-            Tween.DoGoto(t, toPosition, toCompletedLoops, updateMode);
+            Tween.Goto(t, toPosition, toCompletedLoops, updateMode);
         }
 
         internal static bool Play(Tween t)
