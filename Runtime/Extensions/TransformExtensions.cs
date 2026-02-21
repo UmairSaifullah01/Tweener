@@ -22,6 +22,14 @@ namespace THEBADDEST.Tweening2
             return new Bridge.TweenerWrapper(t);
         }
 
+        /// <summary>Same as Move but returns the underlying Tween. Use in sequences to avoid TweenerWrapper allocation.</summary>
+        public static Tween MoveTween(this Transform target, Vector3 endValue, float duration)
+        {
+            TweenerCore<Vector3, Vector3, VectorOptions> t = TweenCore.To(() => target.position, x => target.position = x, endValue, duration);
+            if (t != null) t.target = target;
+            return t;
+        }
+
         /// <summary>Tweens a Transform's localPosition to the given value.
         /// Also stores the transform as the tween's target</summary>
         public static ITweener MoveLocal(this Transform target, Vector3 endValue, float duration)
@@ -29,6 +37,14 @@ namespace THEBADDEST.Tweening2
             TweenerCore<Vector3, Vector3, VectorOptions> t = TweenCore.To(() => target.localPosition, x => target.localPosition = x, endValue, duration);
             if (t != null) t.target = target;
             return new Bridge.TweenerWrapper(t);
+        }
+
+        /// <summary>Same as MoveLocal but returns the underlying Tween. Use in sequences to avoid TweenerWrapper allocation.</summary>
+        public static Tween MoveLocalTween(this Transform target, Vector3 endValue, float duration)
+        {
+            TweenerCore<Vector3, Vector3, VectorOptions> t = TweenCore.To(() => target.localPosition, x => target.localPosition = x, endValue, duration);
+            if (t != null) t.target = target;
+            return t;
         }
 
         /// <summary>Tweens a Transform's localScale to the given value.
@@ -40,6 +56,14 @@ namespace THEBADDEST.Tweening2
             return new Bridge.TweenerWrapper(t);
         }
 
+        /// <summary>Same as Scale but returns the underlying Tween. Use in sequences to avoid TweenerWrapper allocation.</summary>
+        public static Tween ScaleTween(this Transform target, Vector3 endValue, float duration)
+        {
+            TweenerCore<Vector3, Vector3, VectorOptions> t = TweenCore.To(() => target.localScale, x => target.localScale = x, endValue, duration);
+            if (t != null) t.target = target;
+            return t;
+        }
+
         /// <summary>Tweens a Transform's rotation to the given value.
         /// Also stores the transform as the tween's target</summary>
         public static ITweener Rotate(this Transform target, Vector3 endValue, float duration)
@@ -49,6 +73,14 @@ namespace THEBADDEST.Tweening2
             return new Bridge.TweenerWrapper(t);
         }
 
+        /// <summary>Same as Rotate but returns the underlying Tween. Use in sequences to avoid TweenerWrapper allocation.</summary>
+        public static Tween RotateTween(this Transform target, Vector3 endValue, float duration)
+        {
+            TweenerCore<Vector3, Vector3, VectorOptions> t = TweenCore.To(() => target.eulerAngles, x => target.eulerAngles = x, endValue, duration);
+            if (t != null) t.target = target;
+            return t;
+        }
+
         /// <summary>Tweens a Transform's localRotation to the given value.
         /// Also stores the transform as the tween's target</summary>
         public static ITweener RotateLocal(this Transform target, Vector3 endValue, float duration)
@@ -56,6 +88,14 @@ namespace THEBADDEST.Tweening2
             TweenerCore<Vector3, Vector3, VectorOptions> t = TweenCore.To(() => target.localEulerAngles, x => target.localEulerAngles = x, endValue, duration);
             if (t != null) t.target = target;
             return new Bridge.TweenerWrapper(t);
+        }
+
+        /// <summary>Same as RotateLocal but returns the underlying Tween. Use in sequences to avoid TweenerWrapper allocation.</summary>
+        public static Tween RotateLocalTween(this Transform target, Vector3 endValue, float duration)
+        {
+            TweenerCore<Vector3, Vector3, VectorOptions> t = TweenCore.To(() => target.localEulerAngles, x => target.localEulerAngles = x, endValue, duration);
+            if (t != null) t.target = target;
+            return t;
         }
 
         /// <summary>
@@ -221,7 +261,9 @@ namespace THEBADDEST.Tweening2
         }
 
         /// <summary>
-        /// Smoothly follows another transform or position
+        /// Smoothly follows another transform using SmoothDamp. The tween runs until you call Kill() on it
+        /// (there is no fixed duration). smoothTime controls how quickly position approaches the target
+        /// (lower = snappier, higher = more gradual).
         /// </summary>
         public static ITweener SmoothFollow(this Transform target, Transform toFollow, float smoothTime)
         {
@@ -238,7 +280,8 @@ namespace THEBADDEST.Tweening2
         }
 
         /// <summary>
-        /// Smoothly follows a target position
+        /// Smoothly follows a target position using SmoothDamp. The tween runs until you call Kill() on it
+        /// (there is no fixed duration). smoothTime controls how quickly position approaches the target.
         /// </summary>
         public static ITweener SmoothFollow(this Transform target, Vector3 start, Vector3 end, float smoothTime)
         {
@@ -556,6 +599,7 @@ namespace THEBADDEST.Tweening2
 
         /// <summary>
         /// Rotates the transform to look at the target position over the specified duration.
+        /// Uses spherical interpolation so rotation progress is driven by time (0 to 1 over duration).
         /// </summary>
         /// <param name="target">The transform to rotate</param>
         /// <param name="targetPosition">The position to look at</param>
@@ -574,23 +618,25 @@ namespace THEBADDEST.Tweening2
             tweener.Lerp(t =>
             {
                 if (target == null) return;
-                target.rotation = Quaternion.RotateTowards(startRotation, endRotation, t);
+                target.rotation = Quaternion.Slerp(startRotation, endRotation, t);
             }, duration);
 
             return tweener;
         }
 
         /// <summary>
-        /// Rotates the transform towards a target rotation
+        /// Rotates the transform towards a target rotation (Euler angles) over the specified duration.
+        /// Uses spherical interpolation so rotation progress is driven by time (0 to 1 over duration).
         /// </summary>
         public static ITweener RotateTowards2(this Transform target, Vector3 targetRotation, float duration)
         {
             Quaternion startRotation = target.rotation;
+            Quaternion endRotation = Quaternion.Euler(targetRotation);
             var tweener = TweenCore.Create();
             tweener.Lerp(t =>
             {
                 if (target == null) return;
-                target.rotation = Quaternion.RotateTowards(startRotation, Quaternion.Euler(targetRotation), t);
+                target.rotation = Quaternion.Slerp(startRotation, endRotation, t);
             }, duration);
 
             return tweener;

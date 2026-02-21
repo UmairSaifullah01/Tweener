@@ -95,7 +95,7 @@ namespace THEBADDEST.Tweening2
         /// <summary>
         /// Resumes all tweens
         /// </summary>
-        public static void ResumesAll()
+        public static void ResumeAll()
         {
             InitCheck();
             TweenManager.PlayAll();

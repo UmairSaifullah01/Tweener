@@ -139,6 +139,14 @@ namespace THEBADDEST.Tweening2.Core.Easing
                 case EaseType.InOutBounce:
                     if (time < duration * 0.5f) return Evaluate(EaseType.InBounce, null, time * 2, duration, overshootOrAmplitude, period) * 0.5f;
                     return Evaluate(EaseType.OutBounce, null, time * 2 - duration, duration, overshootOrAmplitude, period) * 0.5f + 0.5f;
+                case EaseType.Flash:
+                    return time >= duration ? 1f : 0f;
+                case EaseType.InFlash:
+                    return time > 0 ? 1f : 0f;
+                case EaseType.OutFlash:
+                    return time < duration ? 1f : 0f;
+                case EaseType.InOutFlash:
+                    return (time > 0 && time < duration) ? 1f : 0f;
                 case EaseType.INTERNAL_Zero:
                     return 1;
                 default:

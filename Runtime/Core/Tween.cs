@@ -425,8 +425,7 @@ namespace THEBADDEST.Tweening2.Core
                 TweenManager.Despawn(floatCore);
                 return;
             }
-            floatCore.onComplete += () => _onCompleteAllLoops?.Invoke();
-            floatCore.onStepComplete += () => _onCompleteIteration?.Invoke();
+            // Lerp creates an independent fire-and-forget tween; do not wire its completion to this instance
             TweenManager.AddActiveTween(floatCore);
         }
 
