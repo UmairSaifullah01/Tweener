@@ -22,11 +22,11 @@ namespace THEBADDEST.Tweening
 			}
 		}
 
-		void OnDisable()
-		{
-			if (tweener == null) return;
-			TweenerSolver.StopTweener(tweener);
-		}
+		// void OnDisable()
+		// {
+		// 	if (tweener == null) return;
+		// 	TweenerSolver.StopTweener(tweener);
+		// }
 
 		void Play()
 		{
