@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     [CustomPropertyDrawer(typeof(TweenerTweenStep))]
     public class TweenerTweenStepPropertyDrawer : TweenStepBasePropertyDrawer

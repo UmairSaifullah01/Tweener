@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using THEBADDEST.Tweening2.Core;
+using THEBADDEST.Tweening.Core;
 using UnityEngine.Events;
 
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
 	
 	public abstract class TweenerObject : ScriptableObject

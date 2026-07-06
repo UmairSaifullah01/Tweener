@@ -1,7 +1,7 @@
 using System;
 using UnityEditor.IMGUI.Controls;
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     public sealed class TweenStepAdvancedDropdownItem : AdvancedDropdownItem
     {

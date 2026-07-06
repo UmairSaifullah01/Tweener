@@ -1,7 +1,8 @@
 using System.Collections;
-using THEBADDEST.Tweening2.Core;
+using THEBADDEST.Tweening.Core;
 
-namespace THEBADDEST.Tweening2
+
+namespace THEBADDEST.Tweening
 {
     /// <summary>
     /// Public API for sequence operations (build, config, control, query).

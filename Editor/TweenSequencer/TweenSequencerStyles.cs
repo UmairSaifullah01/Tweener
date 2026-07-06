@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     public static class TweenSequencerStyles
     {

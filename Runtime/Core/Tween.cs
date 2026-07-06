@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
+using THEBADDEST.Tweening.Plugins.Options;
 using UnityEngine;
-using THEBADDEST.Tweening2;
-using THEBADDEST.Tweening2.Plugins.Options;
+using THEBADDEST.Tweening;
 
-namespace THEBADDEST.Tweening2.Core
+
+namespace THEBADDEST.Tweening.Core
 {
     /// <summary>
     /// Indicates either a Tweener or a Sequence

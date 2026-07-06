@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     public static class SerializedPropertyExtensions
     {

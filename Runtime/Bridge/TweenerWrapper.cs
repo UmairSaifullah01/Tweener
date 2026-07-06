@@ -1,27 +1,27 @@
 using System.Collections;
+using THEBADDEST.Tweening.Core;
+using THEBADDEST.Tweening.Plugins.Options;
 using UnityEngine;
-using THEBADDEST.Tweening2.Core;
-using THEBADDEST.Tweening2.Plugins.Options;
-using CoreTween = THEBADDEST.Tweening2.Core.Tween;
+using CoreTween = THEBADDEST.Tweening.Core.Tween;
 
-namespace THEBADDEST.Tweening2.Bridge
+namespace THEBADDEST.Tweening.Bridge
 {
     /// <summary>
     /// Wraps TweenerCore to provide ITweener interface compatibility
     /// </summary>
     internal class TweenerWrapper : ITweener
     {
-        private CoreTween _core;
+        private Tween _core;
         private LerpDelegate _lerpDelegate;
 
-        public CoreTween Tween => _core;
+        public Tween Tween => _core;
 
         public event CallbackDelegate OnCompleteAllLoops;
         public event CallbackDelegate OnCompleteIteration;
 
         public float Duration => _core?.duration ?? 0f;
 
-        internal TweenerWrapper(CoreTween core)
+        internal TweenerWrapper(Tween core)
         {
             _core = core;
             if (_core != null)

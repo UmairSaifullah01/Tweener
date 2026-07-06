@@ -1,10 +1,10 @@
 using System;
-using THEBADDEST.Tweening2;
-using THEBADDEST.Tweening2.Core;
-using THEBADDEST.Tweening2.Plugins.Options;
+using THEBADDEST.Tweening.Core;
+using THEBADDEST.Tweening.Plugins.Options;
+using THEBADDEST.Tweening;
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     [Serializable]
     public sealed class MoveToPositionTweenerAction : TweenerActionBase

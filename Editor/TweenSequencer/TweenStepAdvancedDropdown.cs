@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     public sealed class TweenStepAdvancedDropdown : AdvancedDropdown
     {

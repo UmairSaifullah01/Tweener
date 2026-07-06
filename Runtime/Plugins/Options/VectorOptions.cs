@@ -1,4 +1,4 @@
-namespace THEBADDEST.Tweening2.Plugins.Options
+namespace THEBADDEST.Tweening.Plugins.Options
 {
     public struct VectorOptions : IPlugOptions
     {

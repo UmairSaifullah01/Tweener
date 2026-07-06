@@ -1,7 +1,8 @@
-using THEBADDEST.Tweening2.Core;
-using THEBADDEST.Tweening2.Plugins.Options;
+using THEBADDEST.Tweening.Core;
+using THEBADDEST.Tweening.Plugins.Options;
 
-namespace THEBADDEST.Tweening2.Plugins.Core
+
+namespace THEBADDEST.Tweening.Plugins.Core
 {
     // Public so it can be extended by custom plugins
     public abstract class ABSTweenPlugin<T1, T2, TPlugOptions> : ITweenPlugin where TPlugOptions : struct, IPlugOptions

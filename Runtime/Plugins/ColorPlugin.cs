@@ -1,10 +1,10 @@
-using THEBADDEST.Tweening2.Core;
-using THEBADDEST.Tweening2.Core.Easing;
-using THEBADDEST.Tweening2.Plugins.Core;
-using THEBADDEST.Tweening2.Plugins.Options;
+using THEBADDEST.Tweening.Core;
+using THEBADDEST.Tweening.Core.Easing;
+using THEBADDEST.Tweening.Plugins.Core;
+using THEBADDEST.Tweening.Plugins.Options;
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2.Plugins
+namespace THEBADDEST.Tweening.Plugins
 {
     public class ColorPlugin : ABSTweenPlugin<Color, Color, ColorOptions>
     {

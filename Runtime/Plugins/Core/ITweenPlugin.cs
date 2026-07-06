@@ -1,4 +1,4 @@
-namespace THEBADDEST.Tweening2.Plugins.Core
+namespace THEBADDEST.Tweening.Plugins.Core
 {
     public interface ITweenPlugin
     {

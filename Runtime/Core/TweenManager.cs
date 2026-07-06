@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using THEBADDEST.Tweening.Plugins.Options;
 using UnityEngine;
-using THEBADDEST.Tweening2.Plugins.Options;
 
-namespace THEBADDEST.Tweening2.Core
+
+namespace THEBADDEST.Tweening.Core
 {
     internal static class TweenManager
     {

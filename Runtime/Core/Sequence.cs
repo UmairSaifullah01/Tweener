@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using THEBADDEST.Tweening.Core.Easing;
 using UnityEngine;
-using THEBADDEST.Tweening2;
-using THEBADDEST.Tweening2.Core.Easing;
+using THEBADDEST.Tweening;
 
-namespace THEBADDEST.Tweening2.Core
+
+namespace THEBADDEST.Tweening.Core
 {
     /// <summary>
     /// Controls other tweens as a group

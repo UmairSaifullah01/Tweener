@@ -1,10 +1,11 @@
+using THEBADDEST.Tweening.Core;
+using THEBADDEST.Tweening.Plugins.Options;
 using UnityEngine;
 using UnityEngine.UI;
-using THEBADDEST.Tweening2;
-using THEBADDEST.Tweening2.Core;
-using THEBADDEST.Tweening2.Plugins.Options;
+using THEBADDEST.Tweening;
 
-namespace THEBADDEST.Tweening2
+
+namespace THEBADDEST.Tweening
 {
     /// <summary>
     /// Methods that extend Graphic (Image, Text, etc.) and allow to directly create and control tweens

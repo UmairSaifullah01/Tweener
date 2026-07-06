@@ -1,4 +1,4 @@
-namespace THEBADDEST.Tweening2.Core
+namespace THEBADDEST.Tweening.Core
 {
     public enum UpdateNotice
     {

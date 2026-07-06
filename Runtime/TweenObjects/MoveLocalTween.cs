@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
 
 

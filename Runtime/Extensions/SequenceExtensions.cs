@@ -1,6 +1,7 @@
-using THEBADDEST.Tweening2.Core;
+using THEBADDEST.Tweening.Core;
 
-namespace THEBADDEST.Tweening2
+
+namespace THEBADDEST.Tweening
 {
     /// <summary>
     /// Extension methods for ISequence to provide a DOTween-like API.

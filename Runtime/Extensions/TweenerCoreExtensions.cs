@@ -1,8 +1,9 @@
-using THEBADDEST.Tweening2.Core;
-using THEBADDEST.Tweening2.Plugins.Options;
-using THEBADDEST.Tweening2.Bridge;
+using THEBADDEST.Tweening.Bridge;
+using THEBADDEST.Tweening.Core;
+using THEBADDEST.Tweening.Plugins.Options;
 
-namespace THEBADDEST.Tweening2
+
+namespace THEBADDEST.Tweening
 {
     /// <summary>
     /// Extension methods for TweenerCore to convert to ITweener

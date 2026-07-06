@@ -1,8 +1,8 @@
-using THEBADDEST.Tweening2;
+using THEBADDEST.Tweening;
 using UnityEngine;
 
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
 
 

@@ -5,7 +5,7 @@ using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     public sealed class TweenerActionAdvancedDropdownItem : AdvancedDropdownItem
     {

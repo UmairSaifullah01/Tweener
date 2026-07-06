@@ -1,5 +1,5 @@
 using UnityEngine;
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     [CreateAssetMenu(menuName = "THEBADDEST/Tweening/AnimationTween", fileName = "AnimationTween", order = 0)]
     public class AnimationTween : TweenerObject

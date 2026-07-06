@@ -1,11 +1,12 @@
 using System;
+using THEBADDEST.Tweening.Core;
+using THEBADDEST.Tweening.Plugins.Options;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
-using THEBADDEST.Tweening2.Core;
-using THEBADDEST.Tweening2.Plugins.Options;
 
-namespace THEBADDEST.Tweening2
+
+namespace THEBADDEST.Tweening
 {
     /// <summary>
     /// Methods that extend Transform and allow to directly create and control tweens

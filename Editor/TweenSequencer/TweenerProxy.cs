@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using THEBADDEST.Tweening2;
-using THEBADDEST.Tweening2.Core;
+using THEBADDEST.Tweening.Core;
+using THEBADDEST.Tweening;
 using UnityEditor;
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     internal static class TweenerProxy
     {

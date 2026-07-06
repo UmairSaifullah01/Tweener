@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     [InitializeOnLoad]
     public static class TweenSequencerSetupHelper

@@ -1,10 +1,11 @@
 using System;
+using THEBADDEST.Tweening.Core;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     [CustomEditor(typeof(TweenSequencer), true)]
     public class TweenSequencerCustomEditor : Editor
@@ -388,7 +389,7 @@ namespace THEBADDEST.Tweening2
                 sequencer.SetPauseOnAwake(false);
                 sequencer.SetTimeScaleIndependent(false);
                 sequencer.SetPlayType(TweenSequencer.PlayType.Forward);
-                sequencer.SetUpdateType(THEBADDEST.Tweening2.Core.UpdateType.Normal);
+                sequencer.SetUpdateType(UpdateType.Normal);
                 sequencer.SetAutoKill(true);
                 sequencer.SetLoops(0);
                 sequencer.ResetComplete();

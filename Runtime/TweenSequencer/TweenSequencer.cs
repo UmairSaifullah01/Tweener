@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
-using THEBADDEST.Tweening2.Core;
+using THEBADDEST.Tweening.Core;
 using UnityEngine;
 using UnityEngine.Events;
 
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     [DisallowMultipleComponent]
     public class TweenSequencer : MonoBehaviour

@@ -1,4 +1,4 @@
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     /// <summary>
     /// Used for tween callbacks
@@ -15,7 +15,7 @@ namespace THEBADDEST.Tweening2
     public delegate float EaseFunction(float time, float duration, float overshootOrAmplitude, float period);
 }
 
-namespace THEBADDEST.Tweening2.Core
+namespace THEBADDEST.Tweening.Core
 {
     /// <summary>
     /// Used in place of System.Func, which is not available in mscorlib.

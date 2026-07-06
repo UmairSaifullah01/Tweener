@@ -1,10 +1,9 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
-using THEBADDEST.Tweening2;
 
-namespace THEBADDEST.Tweening2
+
+namespace THEBADDEST.Tweening
 {
     /// <summary>
     /// Virtual tweening utilities for non-transform animations
@@ -176,15 +175,20 @@ namespace THEBADDEST.Tweening2
         /// </summary>
         private static List<int> GetRandomIndices(int count, int maxValue)
         {
-            if (count > maxValue) count = maxValue;
+            count = Mathf.Clamp(count, 0, maxValue);
 
-            List<int> indices = new List<int>();
-            for (int i = 0; i < maxValue; i++)
+            int[] pool = new int[maxValue];
+            for (int i = 0; i < maxValue; i++) pool[i] = i;
+
+            for (int i = 0; i < count; i++)
             {
-                indices.Add(i);
+                int j = Random.Range(i, maxValue);
+                (pool[i], pool[j]) = (pool[j], pool[i]);
             }
 
-            return Shuffle(indices).Take(count).ToList();
+            var result = new List<int>(count);
+            for (int i = 0; i < count; i++) result.Add(pool[i]);
+            return result;
         }
 
         /// <summary>
@@ -324,19 +328,21 @@ namespace THEBADDEST.Tweening2
         public static ITweener RandomIndicesSequence(System.Action<List<int>> onIndicesUpdated, int count, int maxValue, float duration, int updateCount = 5)
         {
             if (onIndicesUpdated == null) return null;
+            if (updateCount <= 0 || duration <= 0f || maxValue <= 0) return null;
 
             var tweener = TweenCore.Create();
-            float interval = duration / updateCount;
+            int lastUpdate = -1;
 
             tweener.Lerp(t =>
             {
-                int currentUpdate = Mathf.FloorToInt(t * updateCount);
-                if (currentUpdate > 0)
+                int currentUpdate = Mathf.Min(Mathf.FloorToInt(t * updateCount), updateCount - 1);
+                if (currentUpdate != lastUpdate)
                 {
-                    List<int> indices = GetRandomIndices(count, maxValue);
-                    onIndicesUpdated(indices);
+                    lastUpdate = currentUpdate;
+                    onIndicesUpdated(GetRandomIndices(count, maxValue));
                 }
             }, duration);
+
             return tweener;
         }
 

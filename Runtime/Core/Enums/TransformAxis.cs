@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2.Core
+namespace THEBADDEST.Tweening.Core
 {
     /// <summary>
     /// Axis constraint for transform operations

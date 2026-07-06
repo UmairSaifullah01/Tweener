@@ -1,8 +1,9 @@
 using System;
-using THEBADDEST.Tweening2.Plugins.Core;
-using THEBADDEST.Tweening2.Plugins.Options;
+using THEBADDEST.Tweening.Plugins.Core;
+using THEBADDEST.Tweening.Plugins.Options;
 
-namespace THEBADDEST.Tweening2.Core
+
+namespace THEBADDEST.Tweening.Core
 {
     /// <summary>
     /// Animates a single value

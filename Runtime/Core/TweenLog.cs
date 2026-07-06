@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2.Core
+namespace THEBADDEST.Tweening.Core
 {
     /// <summary>
     /// Centralized logging utility for THEBADDEST.Tweening2 with [Tween] prefix

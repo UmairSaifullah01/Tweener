@@ -1,4 +1,4 @@
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     /// <summary>
     /// Easing types

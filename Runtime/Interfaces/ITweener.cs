@@ -1,8 +1,9 @@
 using System.Collections;
+using THEBADDEST.Tweening.Core;
 using UnityEngine;
-using THEBADDEST.Tweening2.Core;
 
-namespace THEBADDEST.Tweening2
+
+namespace THEBADDEST.Tweening
 {
     public delegate void LerpDelegate(float intercept);
     public delegate void CallbackDelegate();

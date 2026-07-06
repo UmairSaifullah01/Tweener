@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2.Core.Easing
+namespace THEBADDEST.Tweening.Core.Easing
 {
     public static class EaseManager
     {

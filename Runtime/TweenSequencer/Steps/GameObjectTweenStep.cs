@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace THEBADDEST.Tweening2
+namespace THEBADDEST.Tweening
 {
     [Serializable]
     public abstract class GameObjectTweenStep : TweenStepBase
