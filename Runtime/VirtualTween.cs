@@ -1,19 +1,16 @@
-using THEBADDEST.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.UIElements;
+using THEBADDEST.Tweening2;
 
-
-namespace THEBADDEST.Tweening
+namespace THEBADDEST.Tweening2
 {
-
-
-
+    /// <summary>
+    /// Virtual tweening utilities for non-transform animations
+    /// </summary>
     public static class VirtualTween
     {
-
         /// <summary>
         /// Creates a typewriter effect that types out text character by character.
         /// </summary>
@@ -27,9 +24,9 @@ namespace THEBADDEST.Tweening
         {
             if (onTextUpdated == null) return null;
 
-            var tweener = TweenerSolver.Create();
+            var tweener = TweenCore.Create();
             onTextUpdated(string.Empty);
-            int   totalCharacters   = text.Length;
+            int totalCharacters = text.Length;
             float delayPerCharacter = 1f / typeSpeed;
 
             tweener.Lerp(t =>
@@ -55,7 +52,7 @@ namespace THEBADDEST.Tweening
         /// <returns>The tweener instance</returns>
         public static ITweener Float(LerpDelegate lerpDelegate, float duration, float start = 0f, float end = 1f)
         {
-            var tweener = TweenerSolver.Create();
+            var tweener = TweenCore.Create();
             tweener.Lerp(t => { lerpDelegate?.Invoke(Mathf.LerpUnclamped(start, end, t)); }, duration);
             return tweener;
         }
@@ -74,11 +71,11 @@ namespace THEBADDEST.Tweening
         {
             if (onTextUpdated == null) return null;
 
-            var tweener = TweenerSolver.Create();
+            var tweener = TweenCore.Create();
             onTextUpdated(string.Empty);
-            int   totalCharacters    = text.Length;
-            float delayPerCharacter  = 1f / typeSpeed;
-            int   lastCharacterCount = 0;
+            int totalCharacters = text.Length;
+            float delayPerCharacter = 1f / typeSpeed;
+            int lastCharacterCount = 0;
 
             tweener.Lerp(t =>
             {
@@ -116,7 +113,7 @@ namespace THEBADDEST.Tweening
         {
             if (onValueUpdated == null) return null;
 
-            var tweener = TweenerSolver.Create();
+            var tweener = TweenCore.Create();
             tweener.Lerp(t =>
             {
                 int currentValue = Mathf.RoundToInt(Mathf.Lerp(startValue, endValue, t));
@@ -138,7 +135,7 @@ namespace THEBADDEST.Tweening
         {
             if (onValueUpdated == null) return null;
 
-            var tweener   = TweenerSolver.Create();
+            var tweener = TweenCore.Create();
             int lastValue = startValue;
             tweener.Lerp(t =>
             {
@@ -165,8 +162,8 @@ namespace THEBADDEST.Tweening
 
             for (int i = list.Count - 1; i > 0; i--)
             {
-                int j    = Random.Range(0, i + 1);
-                T   temp = list[i];
+                int j = Random.Range(0, i + 1);
+                T temp = list[i];
                 list[i] = list[j];
                 list[j] = temp;
             }
@@ -262,7 +259,7 @@ namespace THEBADDEST.Tweening
         private static Vector2 GetRandomPointInCircle(Vector2 center, float radius)
         {
             float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-            float r     = Random.Range(0f, radius);
+            float r = Random.Range(0f, radius);
             return center + new Vector2(r * Mathf.Cos(angle), r * Mathf.Sin(angle));
         }
 
@@ -272,8 +269,8 @@ namespace THEBADDEST.Tweening
         private static Vector3 GetRandomPointInSphere(Vector3 center, float radius)
         {
             float theta = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-            float phi   = Random.Range(0f, 180f) * Mathf.Deg2Rad;
-            float r     = Random.Range(0f, radius);
+            float phi = Random.Range(0f, 180f) * Mathf.Deg2Rad;
+            float r = Random.Range(0f, radius);
 
             return center + new Vector3(r * Mathf.Sin(phi) * Mathf.Cos(theta), r * Mathf.Sin(phi) * Mathf.Sin(theta), r * Mathf.Cos(phi));
         }
@@ -291,9 +288,9 @@ namespace THEBADDEST.Tweening
         {
             if (list == null || onListUpdated == null) return null;
 
-            var     tweener     = TweenerSolver.Create();
+            var tweener = TweenCore.Create();
             List<T> workingList = new List<T>(list);
-            float   interval    = duration / shuffleCount;
+            float interval = duration / shuffleCount;
 
             tweener.Lerp(t =>
             {
@@ -303,8 +300,8 @@ namespace THEBADDEST.Tweening
                     // Perform one shuffle
                     for (int i = workingList.Count - 1; i > 0; i--)
                     {
-                        int j    = Random.Range(0, i + 1);
-                        T   temp = workingList[i];
+                        int j = Random.Range(0, i + 1);
+                        T temp = workingList[i];
                         workingList[i] = workingList[j];
                         workingList[j] = temp;
                     }
@@ -328,7 +325,7 @@ namespace THEBADDEST.Tweening
         {
             if (onIndicesUpdated == null) return null;
 
-            var   tweener  = TweenerSolver.Create();
+            var tweener = TweenCore.Create();
             float interval = duration / updateCount;
 
             tweener.Lerp(t =>
@@ -356,7 +353,7 @@ namespace THEBADDEST.Tweening
         {
             if (onColorsUpdated == null) return null;
 
-            var   tweener  = TweenerSolver.Create();
+            var tweener = TweenCore.Create();
 
             tweener.Lerp(t =>
             {
@@ -385,21 +382,11 @@ namespace THEBADDEST.Tweening
         /// <param name="duration">Duration of the animation</param>
         /// <param name="updateCount">Number of times to update the positions (default: 5)</param>
         /// <returns>The tweener instance</returns>
-        /// <summary>
-        /// Creates a tweening animation that generates a sequence of random Vector3 positions over time.
-        /// </summary>
-        /// <param name="onPositionsUpdated">Callback called when new positions are generated</param>
-        /// <param name="positionCount">Number of positions to generate each time</param>
-        /// <param name="min">Minimum values for each component</param>
-        /// <param name="max">Maximum values for each component</param>
-        /// <param name="duration">Duration of the animation</param>
-        /// <param name="updateCount">Number of times to update the positions (default: 5)</param>
-        /// <returns>The tweener instance</returns>
         public static ITweener RandomPositionsSequence(System.Action<List<Vector3>> onPositionsUpdated, int positionCount, Vector3 min, Vector3 max, float duration, int updateCount = 5)
         {
             if (onPositionsUpdated == null) return null;
 
-            var tweener = TweenerSolver.Create();
+            var tweener = TweenCore.Create();
 
             tweener.Lerp(t =>
             {
@@ -426,7 +413,7 @@ namespace THEBADDEST.Tweening
         {
             if (onRotationsUpdated == null) return null;
 
-            var   tweener  = TweenerSolver.Create();
+            var tweener = TweenCore.Create();
             float interval = duration / updateCount;
 
             tweener.Lerp(t =>
@@ -456,10 +443,9 @@ namespace THEBADDEST.Tweening
         /// <returns>List of points forming the zigzag path</returns>
         public static List<Vector3> CreateZigzagPath(Vector3 start, Vector3 end, int zigzagCount, float amplitude)
         {
-            List<Vector3> path          = new List<Vector3>();
-            Vector3       direction     = (end - start).normalized;
-            Vector3       perpendicular = Vector3.Cross(direction, Vector3.up).normalized;
-            float         totalDistance = Vector3.Distance(start, end);
+            List<Vector3> path = new List<Vector3>();
+            Vector3 direction = (end - start).normalized;
+            Vector3 perpendicular = Vector3.Cross(direction, Vector3.up).normalized;
 
             // Add start point
             path.Add(start);
@@ -467,12 +453,12 @@ namespace THEBADDEST.Tweening
             // Calculate points for each zigzag
             for (int i = 0; i < zigzagCount; i++)
             {
-                float   t         = (i + 1) / (float)(zigzagCount + 1);
+                float t = (i + 1) / (float)(zigzagCount + 1);
                 Vector3 basePoint = Vector3.Lerp(start, end, t);
 
                 // Alternate between positive and negative amplitude
-                float   currentAmplitude = amplitude     * (i % 2 == 0 ? 1 : -1);
-                Vector3 offset           = perpendicular * currentAmplitude;
+                float currentAmplitude = amplitude * (i % 2 == 0 ? 1 : -1);
+                Vector3 offset = perpendicular * currentAmplitude;
 
                 path.Add(basePoint + offset);
             }
@@ -481,8 +467,5 @@ namespace THEBADDEST.Tweening
             path.Add(end);
             return path;
         }
-
     }
-
-
 }

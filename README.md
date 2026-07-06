@@ -20,7 +20,7 @@ To integrate the Tweener package into your Unity project, add the following entr
 Below is a simple example demonstrating how to use the Tweener package:
 
 ```csharp
-using THEBADDEST.Tweening;
+using THEBADDEST.Tweening2;
 using UnityEngine;
 
 public class Example : MonoBehaviour
@@ -29,25 +29,36 @@ public class Example : MonoBehaviour
 
     void Start()
     {
-        ITweener tweener = new CoroutineTweener();
-        tweener.Move(target, new Vector3(0, 0, 0), new Vector3(10, 10, 10), 2f);
+        // Extension methods on Transform (returns ITweener for chaining)
+        target.Move(new Vector3(10, 10, 10), 2f)
+            .SetEase(EaseType.OutQuad)
+            .OnComplete(() => Debug.Log("Move done"));
+
+        // Or use TweenCore for full control
+        var sequence = TweenCore.Sequence()
+            .Append(target.MoveTween(new Vector3(5, 0, 0), 1f))
+            .AppendInterval(0.5f)
+            .Append(target.ScaleTween(Vector3.one * 2f, 1f));
     }
 }
 ```
 
 ## Available Commands
-- **Move**: Transitions a game object from a starting position to an ending position.
-- **Scale**: Adjusts a game object from a starting scale to an ending scale.
-- **Rotate**: Rotates a game object from a starting rotation to an ending rotation.
-- **FadeImage**: Changes a UI image's alpha from a starting value to an ending value.
+- **Move**: Transitions a game object from current (or start) position to an ending position.
+- **MoveTween**: Same as Move but returns `Tween` instead of `ITweener` (use in sequences to avoid wrapper allocation).
+- **Scale / ScaleTween**: Adjusts a game object from current (or start) scale to an ending scale.
+- **Rotate / RotateTween**: Rotates a game object from current (or start) rotation to an ending rotation.
+- **FadeImage**: Use GraphicExtensions or color tweens for UI alpha.
 
 ## Easing Functions
 Tweener includes a wide range of easing functions, such as:
 1. Linear
-2. EaseInQuad
-3. EaseOutQuad
-4. EaseInOutQuad
-5. And many more...
+2. EaseInQuad, EaseOutQuad, EaseInOutQuad
+3. InSine, OutSine, InOutSine
+4. InBack, OutBack, InOutBack
+5. InBounce, OutBounce, InOutBounce
+6. Flash, InFlash, OutFlash, InOutFlash
+7. And many more...
 
 ## Author Information
 - **Name**: Umair Saifullah

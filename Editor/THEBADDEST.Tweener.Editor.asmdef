@@ -1,0 +1,19 @@
+{
+    "name": "THEBADDEST.Tweener.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:60cea7f1a457a4e60af16ddad2499046",
+        "THEBADDEST.AnimationSequencer"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
